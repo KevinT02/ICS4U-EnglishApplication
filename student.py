@@ -56,6 +56,7 @@ class Student(User):
         user_file = open('profile.txt', 'a')
         user_file.write(str(record))
         user_file.close()
+        return
         
 
     def printPass(self) -> None:
