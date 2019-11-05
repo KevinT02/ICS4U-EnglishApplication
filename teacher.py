@@ -55,7 +55,7 @@ class Teacher(User):
         self.years = years
 
     def profile(self) -> None :
-        user_array = np.array[]
+        user_array = np.array([])
         user_array.append(self.username,[self.level])
         user_file = open('profile.txt', 'a')
         user_file.write(str(user_array))
