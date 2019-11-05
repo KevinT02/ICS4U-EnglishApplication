@@ -7,9 +7,11 @@
 # -----------------------------------------------------------------------------
 
 from base64 import b64encode, b64decode
+from datamuse import datamuse
 import PySimpleGUI as sg
 import PyPDF2
 import pip
+
 
 from teacher import Teacher
 from user import User
@@ -37,27 +39,27 @@ def nameInput():
 
 
 class Security:
-    '''
-       The complexity analyzer that determines the level of complexity the text inputted into the applcation.
+    """
+    The complexity analyzer that determines the level of complexity the text inputted into the applcation.
 
-       Attributes
-       -----------
-       name: str
-           The name of the user of the account
-       username: str
-           The username of the account
-       password: str
-           The password of the account
+    Attributes
+    -----------
+    name: str
+        The name of the user of the account
+    username: str
+        The username of the account
+    password: str
+        The password of the account
 
 
-       Methods
-       -------
-       sentenceCount () -> None
-         Counts the number of sentences in a text file
-       wordCount() -> None
-         Counts the number of words in a text file
+    Methods
+    -------
+    sentenceCount () -> None
+        Counts the number of sentences in a text file
+    wordCount() -> None
+        Counts the number of words in a text file
 
-       '''
+    """
 
     def _init_(self, username, password):
         """
@@ -81,13 +83,14 @@ class Security:
     def register(self) -> None:
 
         password = self.password
-        encoded = b64encode(password.encode())
+        encoded = b64encode(password.encode())  # convert byte to string
         pass_file = open('password.txt', 'a')
         pass_file.write(self.username)
         pass_file.write("|")
         pass_file.write(encoded)
         pass_file.write("\n")
         pass_file.close()
+
 
     def loginPass(self) -> bool:
 
@@ -96,6 +99,8 @@ class Security:
 
         for line in filePass:
             login_info = line.split("|")
+
+            # convert string to byte
             if self.username == login_info[0] and self.password == b64decode(login_info[1].decode()):
                 print("Correct")
                 return True
@@ -154,7 +159,7 @@ class Complexity:
         for i in range(0, len(fileContents), 1):
             if periods in fileContents[i]:
                 sentenceData.append(i)
-                x = len(sentenceData)
+                x = len(str(sentenceData))
                 print(i)
         print(x)
 
@@ -162,14 +167,21 @@ class Complexity:
         """
         Counts the amount of words in a text file
         """
+
         fileContents = self.fileName.readlines()
 
         wordData = []
 
         for words in fileContents:
-            wordData += words
-        print(len(words))
+            wordData += str(words)
+        print(int(len(words)))
         return
+
+    def wordComplex(self) -> None:
+
+        fileContents = self.fileName.readlines()
+        api = datamuse.Datamuse()
+        api.words(rel_rhy=fileContents, max=1000)
 
 
 class Text:
@@ -205,7 +217,6 @@ class Text:
         """
         writes the inputted text into the desired file
         """
-
         with open(self.text, "a+") as file:
             file.write('temporary input')
 
@@ -239,17 +250,12 @@ userOne.printPass()
 '''
 
 '''
-float - can no exceed 15 digits, decimal numbers of 16 digits can be accurately represented as a float, 32 Bits
-
-
-
-string - can not exceed 63 GB
-
+float - can no exceed 15 digits, decimal numbers of 16 digits can be accurately represented as a float, 32 Bits,4 bytes
+int - 4 bytes store whole number without decimal
+string - can not exceed 63 GB, characters
+char - 1 byte stores single character/letter/number
 byte - can not exceed 8 Bits
+boolean - stores true or false 1 byte
+doubles - 8bytes 64 bit, 16 - 17 sig dig FloatingPointError
 
-doubles - 64 bytes, 16 - 17 stig FloatingPointError
-
-
-user = Student('bob', 'charlie', 123)
-user.nameInput()
 '''
