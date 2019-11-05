@@ -60,18 +60,18 @@ class Security:
        '''
 
     def _init_(self, username, password):
-        '''
-           Constructor to build a compelxity object
+        """
+        Constructor to build a compelxity object
 
 
-           Parameters
-           ----------
-            username : str
-               The username of the account
-            password : str
-               The combination of the password of the account with respect to the username
+        Parameters
+        ----------
+         username : str
+            The username of the account
+         password : str
+            The combination of the password of the account with respect to the username
 
-         '''
+        """
 
         self.username = username
         self.password = password
@@ -105,48 +105,47 @@ class Security:
 
 
 class Complexity:
-    '''
-   The complexity analyzer that determines the level of complexity the text inputted into the applcation.
+    """
+    The complexity analyzer that determines the level of complexity the text inputted into the applcation.
 
-   Attributes
-   -----------
-   name: str
-       The name of the user of the account
-   username: str
-       The username of the account
-   password: str
-       The password of the account
+    Attributes
+    -----------
+    name: str
+        The name of the user of the account
+    username: str
+        The username of the account
+    password: str
+        The password of the account
 
 
-   Methods
-   -------
-   sentenceCount () -> None
-     Counts the number of sentences in a text file
-   wordCount() -> None
-     Counts the number of words in a text file
-
-   '''
+    Methods
+    -------
+     sentenceCount () -> None
+        Counts the number of sentences in a text file
+     wordCount() -> None
+        Counts the number of words in a text file
+     """
 
     def _init_(self, fileName: str):
-        '''
-           Constructor to build a compelxity object
+        """
+        Constructor to build a complexity object
 
 
-           Parameters
-           ----------
-           fileName : str
-               The name of the text file the user wish to determine the complexity of
+        Parameters
+        ----------
+        fileName : str
+            The name of the text file the user wish to determine the complexity of
 
-         '''
+        """
 
         self.fileName = open(fileName, "r")
 
         return
 
     def sentenceCount(self) -> None:
-        '''
-       Counts the number of sentences in a text file
-       '''
+        """
+        Counts the number of sentences in a text file
+        """
         fileContents = self.fileName.readlines()
         periods = '.'
 
@@ -160,9 +159,9 @@ class Complexity:
         print(x)
 
     def wordCount(self) -> None:
-        '''
-       Counts the amount of words in a text file
-       '''
+        """
+        Counts the amount of words in a text file
+        """
         fileContents = self.fileName.readlines()
 
         wordData = []
@@ -174,38 +173,38 @@ class Complexity:
 
 
 class Text:
-    '''
-   A text file the user inputs their text into in order to be analyzed by the applciation
+    """
+    A text file the user inputs their text into in order to be analyzed by the applciation
 
-   Attributes
-   -----------
-   text: str
-       The name of the file user wants to write text in
+    Attributes
+    -----------
+    text: str
+        The name of the file user wants to write text in
 
-   Methods
-   -------
-   writeFile() -> None
-     Writes text into file
+    Methods
+    -------
+    writeFile() -> None
+        Writes text into file
 
-   '''
+    """
 
     def _init_(self, text: str):
-        '''
-           Constructor to build a text object
+        """
+        Constructor to build a text object
 
 
-           Parameters
-           ----------
-           text : str
-               The name of the text file the user wish to input in
+        Parameters
+        ----------
+        text : str
+           The name of the text file the user wish to input in
 
-           '''
+        """
         self.text = text
 
     def writeFile(self) -> None:
-        '''
-       writes the inputted text into the desired file
-       '''
+        """
+        writes the inputted text into the desired file
+        """
 
         with open(self.text, "a+") as file:
             file.write('temporary input')
