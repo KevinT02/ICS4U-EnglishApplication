@@ -12,7 +12,6 @@ import PySimpleGUI as sg
 import PyPDF2
 import pip
 
-
 from teacher import Teacher
 from user import User
 from student import Student
@@ -90,7 +89,6 @@ class Security:
         pass_file.write(encoded)
         pass_file.write("\n")
         pass_file.close()
-
 
     def loginPass(self) -> bool:
 

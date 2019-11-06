@@ -1,7 +1,7 @@
 from abc import ABC
 from base64 import b64encode
 from user import User
-import numpy as np
+
 
 class Teacher(User):
     """
@@ -32,7 +32,10 @@ class Teacher(User):
 
    """
 
-    def __init__(self, name, username, password, degree, years, level):
+    def register(self):
+        pass
+
+    def __init__(self, name, username, password, degree, years, level, occupation):
         """
         Constructor to build a teacher object
 
@@ -53,21 +56,19 @@ class Teacher(User):
 
         self.degree = degree
         self.years = years
+        self.occupation = occupation
 
-    def profile(self) -> None :
-        user_array = np.array([])
-        user_array.append(self.username,[self.level])
+    def profile(self) -> None:
+        user_array = []
+        user_array.append(super().__str__() + "," + self.occupation)
         user_file = open('profile.txt', 'a')
         user_file.write(str(user_array))
         user_file.close()
 
-
-
-
     def printName(self) -> None:
-        '''
+        """
         Prints the name of the user to the console
-        '''
+        """
         print(self.name)
         return
 

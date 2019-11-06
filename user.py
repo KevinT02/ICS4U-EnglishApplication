@@ -10,6 +10,10 @@ class User(ABC):
         super().__init__()
 
     @abstractmethod
+    def __str__(self):
+        return self.name + " " + self.username + " " + self.password + " " + self.level
+
+    @abstractmethod
     def printName(self):
         pass
 
@@ -28,4 +32,3 @@ class User(ABC):
     @abstractmethod
     def printLevel(self):
         return
-
