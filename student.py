@@ -57,6 +57,15 @@ class Student(User):
         """
         print(self.name)
         return
+    
+    def recordStudent -> None:
+        record = np.array([])
+        record.append(self.username)
+        user_file = open('profile.txt', 'a')
+        user_file.write(str(record))
+        user_file.close()
+        return
+        
 
     def printPass(self) -> None:
 
