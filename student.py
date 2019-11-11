@@ -43,7 +43,7 @@ class Student(User):
           The password of the account
 
         """
-        super().__init__(self, name, username, password, level)
+        super().__init__(name, username, password, level)
         self.course = course
 
     def profile(self) -> None:
