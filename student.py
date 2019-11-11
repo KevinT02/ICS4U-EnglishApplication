@@ -1,4 +1,7 @@
 from base64 import b64encode
+
+import numpy as np
+
 from user import User
 
 
@@ -51,24 +54,21 @@ class Student(User):
         user_file.close()
 
     def printName(self) -> None:
-
         """
         Prints the name of the user to the console
         """
         print(self.name)
         return
-    
-    def recordStudent -> None:
+
+    def recordStudent(self) -> None:
         record = np.array([])
         record.append(self.username)
         user_file = open('profile.txt', 'a')
         user_file.write(str(record))
         user_file.close()
         return
-        
 
     def printPass(self) -> None:
-
         """
         Prints the password of the user to the console
         """
@@ -76,7 +76,6 @@ class Student(User):
         return
 
     def printUser(self) -> None:
-
         """
         Prints the username of the user to the compile
 
@@ -85,14 +84,9 @@ class Student(User):
         return
 
     def printLevel(self) -> None:
-
         """
         Prints the academic level of the user to the compile
 
         """
         print(self.level)
         return
-
-
-
-

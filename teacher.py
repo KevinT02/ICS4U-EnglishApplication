@@ -35,7 +35,7 @@ class Teacher(User):
     def register(self):
         pass
 
-    def __init__(self, name, username, password, degree, years, level, occupation):
+    def __init__(self, name, username, password, years, level, degree):
         """
         Constructor to build a teacher object
 
@@ -56,11 +56,10 @@ class Teacher(User):
 
         self.degree = degree
         self.years = years
-        self.occupation = occupation
 
     def profile(self) -> None:
         user_array = []
-        user_array.append(super().__str__() + "," + self.occupation)
+        user_array.append(super().__str__() + "," + self.degree + "," + self.years)
         user_file = open('profile.txt', 'a')
         user_file.write(str(user_array))
         user_file.close()

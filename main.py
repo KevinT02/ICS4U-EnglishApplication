@@ -9,16 +9,18 @@
 from base64 import b64encode, b64decode
 from datamuse import datamuse
 import PySimpleGUI as sg
+
 import PyPDF2
-import pip
 
 from teacher import Teacher
 from user import User
 from student import Student
 
+'''
 user1 = User("bob", "bobby", "123jhdshfs", "middle school")
 teacher1 = Teacher("bob", "bobby", "123jhdshfs", "masters in literature", "2", "middle school")
 student1 = Student("bob", "bobby", "123jhdshfs", "middle school")
+'''
 
 
 def nameInput():
@@ -159,7 +161,7 @@ class Complexity:
                 sentenceData.append(i)
                 x = len(str(sentenceData))
                 print(i)
-        print(x)
+
 
     def wordCount(self) -> None:
         """
@@ -172,7 +174,7 @@ class Complexity:
 
         for words in fileContents:
             wordData += str(words)
-        print(int(len(words)))
+        print(len(wordData))
         return
 
     def wordComplex(self) -> None:
@@ -257,3 +259,4 @@ boolean - stores true or false 1 byte
 doubles - 8bytes 64 bit, 16 - 17 sig dig FloatingPointError
 
 '''
+nameInput()

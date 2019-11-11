@@ -1,34 +1,30 @@
-from abc import ABC, abstractmethod
 
-
-class User(ABC):
-    def __init__(self, name, password, username, level):
+class User():
+    def __init__(self, name, password, username, level, occupation):
         self.name = name
         self.password = password
         self.username = username
         self.level = level
+        self.occupation = occupation
         super().__init__()
 
-    @abstractmethod
-    def __str__(self):
-        return self.name + " " + self.username + " " + self.password + " " + self.level
-
-    @abstractmethod
     def printName(self):
         pass
 
-    @abstractmethod
+    def __str__(self):
+        return self.name + " " + self.username + " " + self.password + " " + self.level
+
+    def printName(self):
+        pass
+
     def printPass(self):
         pass
 
-    @abstractmethod
     def printUser(self):
         pass
 
-    @abstractmethod
     def register(self):
         return
 
-    @abstractmethod
     def printLevel(self):
         return
