@@ -1,6 +1,6 @@
 import model
 import view
-from model import User, Student
+from model import User, Student, Complexity
 
 
 def createUser():
@@ -56,7 +56,9 @@ def bubbleSort(data):
 
 
 def rateComplexity():
-    score = model.fleschScore()
+
+    data = Complexity('literature.txt')
+    score = data.fleschScore()
 
     print('Reading score:' + score)
 

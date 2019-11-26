@@ -284,8 +284,8 @@ class Complexity:
 
     def sentenceCount(self) -> int:
         """
-    Counts the number of sentences in a text file
-    """
+        Counts the number of sentences in a text file
+        """
         periods = '.'
         sentFreq = 0
 
@@ -300,8 +300,8 @@ class Complexity:
 
     def wordCount(self) -> None:
         """
-    Counts the amount of words in a text file
-    """
+        Counts the amount of words in a text file
+        """
         wordData = []
 
         with open(self.fileName, 'r') as file:
@@ -321,6 +321,10 @@ class Complexity:
         return
 
     def fleschScore(self) -> None:
+        """
+
+
+        """
         with open(self.fileName, 'r') as file:
             fileContents = file.readlines()
             readFile = ''.join(fileContents)
@@ -334,7 +338,6 @@ class Complexity:
                     fileContents[j + 1] = fileContents[j]
                     j -= 1
                     fileContents[j + 1] = key
-
             return score
 
 
