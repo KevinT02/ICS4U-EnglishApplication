@@ -1,0 +1,526 @@
+main.py
+
+
+# -----------------------------------------------------------------------------
+# Name:        Main Program (mainProgram.py)
+# Purpose:     To demonstrate understanding of
+# Author:      Kevin Tu
+# Created:     25-Sep-2019
+# Updated:     14-Oct-2019
+# -----------------------------------------------------------------------------
+
+from base64 import b64encode, b64decode
+from datamuse import datamuse
+import PySimpleGUI as sg
+
+import PyPDF2
+
+from teacher import Teacher
+from user import User
+from student import Student
+
+'''
+user1 = User("bob", "bobby", "123jhdshfs", "middle school")
+teacher1 = Teacher("bob", "bobby", "123jhdshfs", "masters in literature", "2", "middle school")
+student1 = Student("bob", "bobby", "123jhdshfs", "middle school")
+'''
+
+def nameInput():
+    layout = [
+        [sg.Text('Please enter your Name, Address, Phone')],
+        [sg.Text('Name', size=(15, 1)), sg.InputText('name')],
+        [sg.Text('Address', size=(15, 1)), sg.InputText('address')],
+        [sg.Text('Phone', size=(15, 1)), sg.InputText('phone')],
+        [sg.Submit(), sg.Cancel()]
+
+    ]
+
+    window = sg.Window('Simple data entry window').Layout(layout)
+    button, values = window.Read()
+
+    print(button, values[0], values[1], values[2])
+    return
+
+
+
+class Security:
+    """
+    The complexity analyzer that determines the level of complexity the text inputted into the applcation.
+
+    Attributes
+    -----------
+    name: str
+        The name of the user of the account
+    username: str
+        The username of the account
+    password: str
+        The password of the account
+
+
+    Methods
+    -------
+    sentenceCount () -> None
+        Counts the number of sentences in a text file
+    wordCount() -> None
+        Counts the number of words in a text file
+
+    """
+
+    def _init_(self, username, password):
+        """
+        Constructor to build a compelxity object
+
+
+        Parameters
+        ----------
+         username : str
+            The username of the account
+         password : str
+            The combination of the password of the account with respect to the username
+
+        """
+
+        self.username = username
+        self.password = password
+
+        return
+
+    def register(self) -> None:
+
+        password = self.password
+        encoded = b64encode(password.encode())  # convert byte to string
+        pass_file = open('password.txt', 'a')
+        pass_file.write(self.username)
+        pass_file.write("|")
+        pass_file.write(encoded)
+        pass_file.write("\n")
+        pass_file.close()
+
+    def loginPass(self) -> bool:
+
+        pass_file = open('password.txt', 'r')
+        filePass = pass_file.readlines()
+
+        for line in filePass:
+            login_info = line.split("|")
+
+            # convert string to byte
+            if self.username == login_info[0] and self.password == b64decode(login_info[1].decode()):
+                print("Correct")
+                return True
+            else:
+                print("Incorrect")
+                return False
+
+
+class Complexity:
+    """
+    The complexity analyzer that determines the level of complexity the text inputted into the applcation.
+
+    Attributes
+    -----------
+    name: str
+        The name of the user of the account
+    username: str
+        The username of the account
+    password: str
+        The password of the account
+
+
+    Methods
+    -------
+     sentenceCount () -> None
+        Counts the number of sentences in a text file
+     wordCount() -> None
+        Counts the number of words in a text file
+     """
+
+    def _init_(self, fileName: str):
+        """
+        Constructor to build a complexity object
+
+
+        Parameters
+        ----------
+        fileName : str
+            The name of the text file the user wish to determine the complexity of
+
+        """
+
+        self.fileName = open(fileName, "r")
+
+        return
+
+    def sentenceCount(self) -> None:
+        """
+        Counts the number of sentences in a text file
+        """
+        fileContents = self.fileName.readlines()
+        periods = '.'
+
+        sentenceData = []
+
+        for i in range(0, len(fileContents), 1):
+            if periods in fileContents[i]:
+                sentenceData.append(i)
+                x = len(str(sentenceData))
+                print(i)
+        print(x)
+
+    def wordCount(self) -> None:
+        """
+        Counts the amount of words in a text file
+        """
+
+        fileContents = self.fileName.readlines()
+
+        wordData = []
+
+        for words in fileContents:
+            wordData += str(words)
+        print(int(len(words)))
+        return
+
+    def wordComplex(self) -> None:
+
+        fileContents = self.fileName.readlines()
+        api = datamuse.Datamuse()
+        api.words(rel_rhy=fileContents, max=1000)
+
+
+class Text:
+    """
+    A text file the user inputs their text into in order to be analyzed by the applciation
+
+    Attributes
+    -----------
+    text: str
+        The name of the file user wants to write text in
+
+    Methods
+    -------
+    writeFile() -> None
+        Writes text into file
+
+    """
+
+    def _init_(self, text: str):
+        """
+        Constructor to build a text object
+
+
+        Parameters
+        ----------
+        text : str
+           The name of the text file the user wish to input in
+
+        """
+        self.text = text
+
+    def writeFile(self) -> None:
+        """
+        writes the inputted text into the desired file
+        """
+        with open(self.text, "a+") as file:
+            file.write('temporary input')
+
+
+'''
+
+fileName = input('Which file would you like to open? ')
+
+fileOne = Complexity(fileName)
+
+userOne = Student("bob", "BBoy123", "bob321")
+
+
+try:
+  Text(12)
+except TypeError:
+  print ("Raised a TypeError as expected")
+except Exception:
+  print ("Some other Error popped up?")
+
+try:
+  Complexity(12)
+except TypeError:
+  print ("Raised a TypeError as expected")
+except Exception:
+  print ("Some other Error popped up?")
+
+userOne.printName()
+userOne.printUser()
+userOne.printPass()
+'''
+
+'''
+float - can no exceed 15 digits, decimal numbers of 16 digits can be accurately represented as a float, 32 Bits,4 bytes
+int - 4 bytes store whole number without decimal
+string - can not exceed 63 GB, characters
+char - 1 byte stores single character/letter/number
+byte - can not exceed 8 Bits
+boolean - stores true or false 1 byte
+doubles - 8bytes 64 bit, 16 - 17 sig dig FloatingPointError
+object - maximum size of a python list on a 32 bit system is 536,870,912 elements
+
+'''
+nameInput()
+
+
+
+
+
+
+
+
+
+student.py
+
+
+
+from base64 import b64encode
+from user import User
+
+
+class Student(User):
+    """
+    An account object that hold the information of the user: full name, username, password
+
+    Attributes
+    -----------
+    name: str
+        The name of the user of the account
+    username: str
+        The username of the student account
+    password: str
+        The password of the student account
+
+
+    Methods
+    -------
+    printName() -> None
+      Prints the name of the account to the console
+    printPass() -> None
+      Prints the password of the account to the console
+    printUser() -> None
+      Prints the username of the account to the console
+    """
+
+    def __init__(self, name, username, password, level, course, age):
+        """
+        Constructor to build a account object
+
+        Parameteres
+        ---------------
+        name: str
+          The name of the user of the account
+        username: str
+          The username of the account
+        password: str
+          The password of the account
+
+        """
+        super().__init__(self, name, username, password, level)
+        self.course = course
+        self.age = age
+
+    def profile(self) -> None:
+        user_array = []
+        user_array.append(super().__str__() + "," + self.course + "," + str(self.age))
+        user_file = open('profile.txt', 'a')
+        user_file.write(str(user_array))
+        user_file.close()
+
+    def printName(self) -> None:
+
+        """
+        Prints the name of the user to the console
+        """
+        print(self.name)
+        return
+
+    def recordStudent(self) -> None:
+        record = np.array([])
+        record.append(self.username)
+        user_file = open('profile.txt', 'a')
+        user_file.write(str(record))
+        user_file.close()
+        return
+
+
+    def printPass(self) -> None:
+
+        """
+        Prints the password of the user to the console
+        """
+        print(self.password)
+        return
+
+    def printUser(self) -> None:
+
+        """
+        Prints the username of the user to the compile
+
+        """
+        print(self.username)
+        return
+
+    def printLevel(self) -> None:
+
+        """
+        Prints the academic level of the user to the compile
+
+        """
+        print(self.level)
+        return
+
+
+
+teacher.py
+
+
+from abc import ABC
+from base64 import b64encode
+from user import User
+
+
+class Teacher(User):
+    """
+   The Teacher that communicates with the student about suggestions and tips for chosing and reading a book.
+
+   Attributes
+   -----------
+   name: str
+       The name of teacher
+   degree: str
+       The degree the teacher has
+   years: str
+       The number of years the teacher has teaching / amount of experience
+   level: str
+       The level at which the teacher teaches at (ie. elementary, middle, high)
+
+
+   Methods
+   -------
+   printName() -> None
+     Prints the name of the teacher to the console
+   printDegree() -> None
+     Prints the degrees / qualifications teacher to the console
+   printYear() -> None
+     Prints the years the teacher has been teaching to the console
+   printLevel() -> None
+     Prints the level teacher teaches to the console
+
+   """
+
+    def register(self):
+        pass
+
+    def __init__(self, name, username, password, degree, years, level, occupation):
+        """
+        Constructor to build a teacher object
+
+
+        Parameters
+        ----------
+        name: str
+        The name of teacher
+        degree: str
+        The degree the teacher has
+        years: str
+           The number of years the teacher has teaching / amount of experience
+        level: str
+           The level at which the teacher teaches at (ie. elementary, middle, high)
+
+        """
+        super().__init__(name, username, password, level)
+
+        self.degree = degree
+        self.years = years
+        self.occupation = occupation
+
+    def profile(self) -> None:
+        user_array = []
+        user_array.append(super().__str__() + "," + self.occupation)
+        user_file = open('profile.txt', 'a')
+        user_file.write(str(user_array))
+        user_file.close()
+
+    def printName(self) -> None:
+        """
+        Prints the name of the user to the console
+        """
+        print(self.name)
+        return
+
+    def printPass(self) -> None:
+        """
+        Prints the password of the user to the console
+        """
+        print(self.password)
+        return
+
+    def printUser(self) -> None:
+        """
+        Prints the username of the user to the compile
+
+        """
+        print(self.username)
+        return
+
+    def printLevel(self) -> None:
+        """
+        Prints the level of the teacher to the console
+        """
+        print(self.level)
+        return
+
+    def printDegree(self) -> None:
+        """
+        Prints the degree teacher processes to the console
+
+        """
+        print(self.degree)
+        return
+
+    def printYear(self) -> None:
+        """
+        Prints the year of the teacher to the compile
+        """
+        print(self.years)
+        return
+
+
+
+user.py
+
+
+class User():
+    def __init__(self, name, password, username, level):
+        self.name = name
+        self.password = password
+        self.username = username
+        self.level = level
+        super().__init__()
+
+    def printName(self):
+        pass
+
+    def __str__(self):        return self.name + " " + self.username + " " + self.password + " " + self.level
+
+    def printPass(self):
+        pass
+
+    def printUser(self):
+        pass
+
+    def register(self):
+        return
+
+    def printLevel(self):
+        return
+
+
+
+
+
