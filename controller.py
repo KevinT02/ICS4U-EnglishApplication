@@ -1,4 +1,3 @@
-import model
 import view
 from model import User, Student, Complexity
 
