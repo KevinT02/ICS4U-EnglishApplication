@@ -4,9 +4,9 @@ pastas = open('user.txt', 'r')
 pastaArray = pastas.readlines()
 infoList = []
 
-for i in range(0, 100000):
+for i in range(0, 10000):
 
-    prices = (open('age.txt', 'w'))
+    prices = (open('age.txt', 'a'))
     userList = pastaArray[random.randint(0, 399)]
 
     infoList.append(userList)
