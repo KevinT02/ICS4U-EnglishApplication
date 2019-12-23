@@ -55,7 +55,6 @@ def bubbleSort(data):
 
 
 def rateComplexity():
-
     data = Complexity('literature.txt')
     score = data.fleschScore()
 

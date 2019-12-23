@@ -8,8 +8,8 @@
 
 # imports function from view and call function in order
 
-import controller
-import view
+import view as v
+from model import User, Student
 
 '''
 float - can no exceed 15 digits, decimal numbers of 16 digits can be accurately represented as a float, 32 Bits,4 bytes
@@ -23,5 +23,9 @@ object - maximum size of a python list on a 32 bit system is 536,870,912 element
 
 '''
 
-view.userAcc()
-controller.createUser()
+v.userAcc()
+
+
+thing = User('name', 'username', 'password', 'occupation')
+student = Student('ICS4U', '12', 'grade 12')
+

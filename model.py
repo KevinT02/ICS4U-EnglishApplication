@@ -6,27 +6,27 @@ import PyPDF2
 
 
 class User():
-    def __init__(self, name, username, password, occupation, data):
+    def __init__(self, name, username, password, occupation):
         self.name = name
         self.password = password
         self.username = username
         self.occupation = occupation
-        self.data = data  # the data file object uses
+        self.file = 'user.txt'
         super().__init__()
 
     def __str__(self):
-        return self.name + " " + self.username + " " + self.password + " " + self.occupation
+        return self.name + ", " + self.username + ", " + self.password + ", " + self.occupation
 
     def register(self) -> None:
-        file = (open('user.txt', 'a+'))
-        for i in file:
-            userList = [self.name]
-            fullList = ' | '.join(userList)
-            i.write(fullList)
+        file = (open(self.file, 'a+'))
+
+        userList = [self.name, self.username, self.password]
+        fullList = ' | '.join(userList)
+        file.write(fullList, "\n")
         return
 
     def createAcc(self):
-        file = open(self.data, 'r')
+        file = open(self.file, 'r')
         fileContents = file.readlines()
 
         dataList = []
@@ -45,29 +45,30 @@ class User():
 
 class Student(User):
     """
-  An account object that hold the information of the user: full name, username, password
+    An account object that hold the information of the user: full name, username, password
 
-  Attributes
-  -----------
-  name: str
+    Attributes
+    -----------
+    name: str
       The name of the user of the account
-  username: str
+    username: str
       The username of the student account
-  password: str
+    password: str
       The password of the student account
 
 
-  Methods
-  -------
-  printName() -> None
+    Methods
+    -------
+    printName() -> None
     Prints the name of the account to the console
-  printPass() -> None
+    printPass() -> None
     Prints the password of the account to the console
-  printUser() -> None
+    printUser() -> None
     Prints the username of the account to the console
-  """
 
-    def __init__(self, name, username, password, occupation, course, age, readLevel):
+    """
+
+    def __init__(self, course, grade, age, readLevel):
         """
     Constructor to build a account object
 
@@ -83,59 +84,21 @@ class Student(User):
     """
         super().__init__(self, name, username, password, occupation)
         self.course = course
+        self.grade = grade
         self.age = age
         self.readLevel = readLevel
 
     def profile(self) -> None:
-        userProfile = [super().__str__() + "," + self.course + "," + str(self.age)]
-        user_file = open('profile.txt', 'a')
-        user_file.write(str(userProfile))
-        user_file.close()
 
-    def printName(self) -> None:
-        """
-    Prints the name of the user to the console
-    """
-        print(self.name)
-        return
+        userList = [super().__str__() + "," + self.course + ",",
+                    self.grade + "," + str(self.age) + "," + self.readLevel]
 
-    def recordStudent(self) -> None:
-        record = np.array([])
-        record.append(self.username)
-        user_file = open('profile.txt', 'a')
-        user_file.write(str(record))
-        user_file.close()
-        return
+        with open('student.txt', 'a') as user_file:
+            fullList = ' | '.join(userList)
+            user_file.write(fullList, "\n")
 
-    def printPass(self) -> None:
-        """
-    Prints the password of the user to the console
-    """
-        print(self.password)
-        return
-
-    def printUser(self) -> None:
-        """
-    Prints the username of the user to the compile
-
-    """
-        print(self.username)
-        return
-
-    def printOccupation(self) -> None:
-        """
-    Prints the occupation of the user to the terminal
-
-    """
-        print(self.occupation)
-        return
-
-    def printReadLevel(self) -> None:
-        """
-    Prints the reading level of the user to the terminal
-    """
-        print(self.readLevel)
-        return
+    def __str__(self):
+        return super().__str__() + ", " + self.course + ", " + self.age + ", " + self.readLevel
 
 
 class Teacher(User):
@@ -167,10 +130,7 @@ class Teacher(User):
 
   """
 
-    def register(self):
-        pass
-
-    def __init__(self, name, username, password, degree, years, occupation):
+    def __init__(self, name, username, password, occupation, degree, years):
         """
     Constructor to build a teacher object
 
@@ -193,55 +153,13 @@ class Teacher(User):
         self.years = years
 
     def profile(self) -> None:
-        user_array = []
-        user_array.append(super().__str__() + "," + self.occupation)
-        user_file = open('profile.txt', 'a')
+        user_array = [super().__str__() + '\n']
+        user_file = open('teacher.txt', 'a')
         user_file.write(str(user_array))
         user_file.close()
 
-    def printName(self) -> None:
-        """
-    Prints the name of the user to the console
-    """
-        print(self.name)
-        return
-
-    def printPass(self) -> None:
-        """
-    Prints the password of the user to the console
-    """
-        print(self.password)
-        return
-
-    def printUser(self) -> None:
-        """
-    Prints the username of the user to the compile
-
-    """
-        print(self.username)
-        return
-
-    def printOccupation(self) -> None:
-        """
-    Prints the occupation of the teacher to the console
-    """
-        print(self.occupation)
-        return
-
-    def printDegree(self) -> None:
-        """
-    Prints the degree teacher processes to the console
-
-    """
-        print(self.degree)
-        return
-
-    def printYear(self) -> None:
-        """
-    Prints the year of the teacher to the compile
-    """
-        print(self.years)
-        return
+    def __str__(self):
+        return super().__str__() + ', ' + self.degree + ", " + self.years
 
 
 class Complexity:
