@@ -1,11 +1,16 @@
-import view
-from model import User, Student, Complexity
+import view as v
+from model import User, Student, Complexity, Security
 
 
 def createUser():
-    userInfo = view.userAcc()
-    user = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
-    user.register()
+    userInfo = v.userAcc()
+
+    userSave = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
+    userProtect = Security('joe', 'bob', 'guy')
+    print(userSave)
+    print(userProtect)
+    userProtect.passSave()
+    userSave.register()
     return
 
 

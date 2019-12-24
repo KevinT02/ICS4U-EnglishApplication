@@ -9,6 +9,7 @@
 # imports function from view and call function in order
 
 import view as v
+import controller as c
 from model import User, Student
 
 '''
@@ -23,9 +24,7 @@ object - maximum size of a python list on a 32 bit system is 536,870,912 element
 
 '''
 
-v.userAcc()
+c.createUser()
 
 
-thing = User('name', 'username', 'password', 'occupation')
-student = Student('ICS4U', '12', 'grade 12')
 

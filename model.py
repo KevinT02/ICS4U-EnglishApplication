@@ -1,11 +1,12 @@
 from base64 import b64encode, b64decode
 import datamuse as dm
+import hashlib as h
 import numpy as np
 import textstat as tx
 import PyPDF2
 
 
-class User():
+class User:
     def __init__(self, name, username, password, occupation):
         self.name = name
         self.password = password
@@ -20,9 +21,9 @@ class User():
     def register(self) -> None:
         file = (open(self.file, 'a+'))
 
-        userList = [self.name, self.username, self.password]
+        userList = [self.name, self.username, self.password, self.occupation]
         fullList = ' | '.join(userList)
-        file.write(fullList, "\n")
+        file.write(fullList + "\n")
         return
 
     def createAcc(self):
@@ -68,7 +69,7 @@ class Student(User):
 
     """
 
-    def __init__(self, course, grade, age, readLevel):
+    def __init__(self, name, username, password, occupation, course, grade, age, readLevel):
         """
     Constructor to build a account object
 
@@ -89,7 +90,6 @@ class Student(User):
         self.readLevel = readLevel
 
     def profile(self) -> None:
-
         userList = [super().__str__() + "," + self.course + ",",
                     self.grade + "," + str(self.age) + "," + self.readLevel]
 
@@ -184,7 +184,7 @@ class Complexity:
       Counts the number of words in a text file
     """
 
-    def _init_(self, fileName: str):
+    def __init__(self, fileName: str):
         """
     Constructor to build a complexity object
 
@@ -282,9 +282,9 @@ class Security:
 
     """
 
-    def _init_(self, username, password, data):
+    def __init__(self, username, password, data):
         """
-        Constructor to build a compelxity object
+        Constructor to build a complexity object
 
 
         Parameters
@@ -313,16 +313,15 @@ class Security:
                 j -= 1
             info[j + 1] = key
 
-    def register(self) -> None:
+    def passSave(self) -> None:
 
-        password = self.password
-        encoded = b64encode(password.encode())  # convert byte to string
-        pass_file = open('password.txt', 'a')
-        pass_file.write(self.username)
-        pass_file.write("|")
-        pass_file.write(encoded)
-        pass_file.write("\n")
-        pass_file.close()
+        hashPass = hashlib.shal(str.encode(self.password)).hexdigest()  # convert byte to string
+
+        passList = [self.username, str(hashPass)]
+
+        with open('password.txt', 'a') as pass_file:
+            fullList = ' | '.join(passList)
+            pass_file.write(fullList + "\n")
 
     def loginPass(self) -> bool:
 
@@ -330,10 +329,10 @@ class Security:
         filePass = pass_file.readlines()
 
         for line in filePass:
-            login_info = line.split("|")
+            login_info = line.split(" | ")
 
             # convert string to byte
-            if self.username == login_info[0] and self.password == b64decode(login_info[1].decode()):
+            if self.username == login_info[0] and hashlab.sha1(str.encode(self.password)).hexdigest() == login_info[1]:
                 print("Correct")
                 return True
             else:
