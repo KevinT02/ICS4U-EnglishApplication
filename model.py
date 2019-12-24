@@ -1,6 +1,6 @@
 from base64 import b64encode, b64decode
 import datamuse as dm
-import hashlib as h
+import hashlib
 import numpy as np
 import textstat as tx
 import PyPDF2
@@ -315,7 +315,7 @@ class Security:
 
     def passSave(self) -> None:
 
-        hashPass = hashlib.shal(str.encode(self.password)).hexdigest()  # convert byte to string
+        hashPass = hashlib.sha1(str.encode(self.password)).hexdigest()  # convert byte to string
 
         passList = [self.username, str(hashPass)]
 

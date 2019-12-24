@@ -50,10 +50,11 @@ def userAcc():
     while True:  # Event Loop
         event, values = window.read()
         print(event, values)
+        print(values[1], values[1], values[2], values[3])
         if event in (None, 'Cancel'):
             break
         if event == 'Submit':
-            return values[0], values[1], values[2], values[3]
+            return values[1], values[1], values[2], values[3]
         if event == 'Show':
             sg.popup(values[2])
     return
