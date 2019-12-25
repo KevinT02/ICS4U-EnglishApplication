@@ -4,11 +4,8 @@ from model import User, Student, Complexity, Security
 
 def createUser():
     userInfo = v.userAcc()
-
     userSave = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
     userProtect = Security(userInfo[0], userInfo[1], userInfo[2])
-    print(userSave)
-    print(userProtect)
     userProtect.passSave()
     userSave.register()
     return

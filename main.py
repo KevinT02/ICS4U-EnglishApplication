@@ -23,8 +23,7 @@ doubles - 8bytes 64 bit, 16 - 17 sig dig FloatingPointError
 object - maximum size of a python list on a 32 bit system is 536,870,912 elements
 
 '''
-
-c.createUser()
+v.begin()
 
 
 

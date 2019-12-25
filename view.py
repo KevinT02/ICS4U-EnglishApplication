@@ -6,23 +6,28 @@ def begin():
     sg.change_look_and_feel('Reddit')
     layout = [
         [sg.Text('')],
-        [sg.Text('Acrolect', size=(8, 2), font=('Helvetica', 20), justification='left')],
-        [sg.Text('Please enter your User information')],
-        [sg.Text('Name', size=(15, 1)),
-         sg.Input(size=(45, 1))],
-        [sg.Text('Username', size=(15, 1)),
-         sg.Input(size=(45, 1))],
-        [sg.Text('Password', size=(15, 1)),
-         sg.Input(size=(45, 1), password_char='•')],
-        [sg.Text('Level', size=(15, 1)),
-         sg.Input(size=(45, 1))],
-        [sg.Submit(), sg.Cancel()]
+        [sg.Text('', size=(17, 1)), sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(5).png')],
+        [sg.Text('Sign in', size=(45, 2), font=('Helvetica', 15), justification='left')],
+        [sg.Text('Username'), sg.Input(size=(45, 1))],
+        [sg.Text('Password'), sg.Input(size=(45, 1))],
+        [sg.Text('')],
+        [sg.Button('Login'), sg.Button('Create account')]
 
     ]
 
-    window = sg.Window('User Login', layout)
-    button, values = window.Read()
+    window = sg.Window('Main Menu', layout)
 
+    while True:  # Event Loop
+        event, values = window.read()
+        print(event, values)
+
+        if event in (None, 'Cancel'):
+            break
+        if event == 'Create account':
+            window.close()
+            userAcc()
+        if event == 'Show':
+            sg.popup(values['PASSWORD'])
     return
 
 
@@ -31,32 +36,42 @@ def userAcc():
 
     # Column layout
     col = [
-        [sg.Text('Please enter your User information', size=(25, 1))],
+        [sg.Text('Please fill in the following:', size=(40, 2), font=('BoldArial', 12))],
         [sg.Text('Name', size=(15, 1)),
-         sg.Input(size=(45, 1))],
+         sg.Input(size=(45, 1), key='NAME')],
         [sg.Text('Username', size=(15, 1)),
-         sg.Input(size=(45, 1))],
+         sg.Input(size=(45, 1), key='USERNAME')],
         [sg.Text('Password', size=(15, 1)),
-         sg.Input(size=(45, 1), password_char='•'),
+         sg.Input(size=(45, 1), password_char='•', key='PASSWORD'),
          sg.Button('Show')],
         [sg.Text('Level', size=(15, 1)),
-         sg.Input(size=(45, 1))],
+         sg.DropDown(('Student', 'Teacher'), size=(40, 1), key='OCCUPATION')],
+        [sg.Text('')],
         [sg.Submit(), sg.Cancel()]]
 
-    layout = [[sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(2).png'), sg.Column(col)]]
+    # Main layout
+    layout = [[sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(5).png'), sg.Column(col)]]
 
-    window = sg.Window('User Login', layout)
+    window = sg.Window('Create account', layout)
 
     while True:  # Event Loop
         event, values = window.read()
         print(event, values)
-        print(values[1], values[1], values[2], values[3])
+        print(values['NAME'], values['USERNAME'], values['PASSWORD'], values['OCCUPATION'])
         if event in (None, 'Cancel'):
+            window.close()
             break
         if event == 'Submit':
-            return values[1], values[1], values[2], values[3]
+            if values['NAME'] != '' and values['USERNAME'] != '' and values['PASSWORD'] != '' and values['OCCUPATION'] != '':
+                if values['OCCUPATION'] == 'Student' or values['OCCUPATION'] == 'Teacher':
+                    return values['NAME'], values['USERNAME'], values['PASSWORD'], values['OCCUPATION']
+
+                else:
+                    sg.popup('Occupation invalid, use the dropdown menu')
+            else:
+                sg.popup('Please fill in all boxes')
         if event == 'Show':
-            sg.popup(values[2])
+            sg.popup(values['PASSWORD'])
     return
 
 
