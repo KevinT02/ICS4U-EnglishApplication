@@ -17,17 +17,13 @@ class User:
         return self.name + ", " + self.username + ", " + Security.passEncrypt(self.password) + ", " + self.occupation
 
     def register(self) -> None:
-        file = (open(self.file, 'a+'))
-        userList = [self.name, self.username, self.occupation]
-        fullList = ' | '.join(userList)
-        file.write(fullList + "\n")
 
-        passList = [self.username, Security.passEncrypt(self.password)]
+        with open(self.file, 'a+') as user_file:
+            userList = [self.name, self.username, Security.passEncrypt(self.password), self.occupation]
+            fullList = ' | '.join(userList)
+            user_file.write(fullList + "\n")
 
-        with open('password.txt', 'a') as pass_file:
-            fullList = ' | '.join(passList)
-            pass_file.write(fullList + "\n")
-
+        Security.passSave(self.username, Security.passEncrypt(self.password))
         return
 
     def createAcc(self):
@@ -47,8 +43,8 @@ class User:
             for l in dataList:
                 account[i] = l
 
-    def loadUserList():
-        file = (open('user.txt', 'r')).readlines()
+    def loadUserList(self):
+        file = (open(self.file, 'r')).readlines()
 
         for line in file:
             u = line.strip("\n")
@@ -335,6 +331,13 @@ class Security:
         hashPass = hashlib.sha1(str.encode(password)).hexdigest()  # convert byte to string
 
         return str(hashPass)
+
+    @staticmethod
+    def passSave(username, password):
+        with open('password.txt', 'a') as pass_file:
+            passList = [username, Security.passEncrypt(password)]
+            fullList = ' | '.join(passList)
+            pass_file.write(fullList + "\n")
 
     def loginPass(self) -> bool:
 

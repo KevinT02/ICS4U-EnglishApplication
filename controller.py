@@ -4,10 +4,7 @@ from model import User, Student, Complexity, Security
 
 
 def createUser(userInfo):
-    userSave = User(userInfo[0], userInfo[1], userInfo[3])
-    hashPass = passEncrypt(userInfo[2])
-    userProtect = Security(userInfo[0], userInfo[1], hashPass)
-    userProtect.passSave()
+    userSave = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
     userSave.register()
     return userInfo
 
@@ -25,11 +22,6 @@ def loadUserList():
         for user in users:
             print(user.name + ': ' + user.occupation())
     return
-
-
-def passEncrypt(password):
-    hashPass = hashlib.sha1(str.encode(password)).hexdigest()  # convert byte to string
-    return str(hashPass)
 
 
 def numSort(data):
@@ -89,12 +81,12 @@ def rateComplexity():
 
 
 def run():
-    v.begin()
-    gui = v.userAcc()
+    v.GUI.begin()
+    gui = v.GUI.userAcc()
     createUser(gui)
 
     if gui[3] == 'Student':
-        v.studentAcc()
+        v.GUI.studentAcc()
     elif gui[3] == 'Teacher':
-        v.teacherAcc()
+        v.GUI.teacherAcc()
     return
