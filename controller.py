@@ -1,14 +1,15 @@
+import hashlib
 import view as v
 from model import User, Student, Complexity, Security
 
 
-def createUser():
-    userInfo = v.userAcc()
-    userSave = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
-    userProtect = Security(userInfo[0], userInfo[1], userInfo[2])
+def createUser(userInfo):
+    userSave = User(userInfo[0], userInfo[1], userInfo[3])
+    hashPass = passEncrypt(userInfo[2])
+    userProtect = Security(userInfo[0], userInfo[1], hashPass)
     userProtect.passSave()
     userSave.register()
-    return
+    return userInfo
 
 
 def loadUserList():
@@ -23,6 +24,12 @@ def loadUserList():
                  Student(infoStudent[0], infoStudent[1], infoStudent[2], infoStudent[3])]
         for user in users:
             print(user.name + ': ' + user.occupation())
+    return
+
+
+def passEncrypt(password):
+    hashPass = hashlib.sha1(str.encode(password)).hexdigest()  # convert byte to string
+    return str(hashPass)
 
 
 def numSort(data):
@@ -41,6 +48,7 @@ def numSort(data):
             data[j + 1] = data[j]
             j -= 1
         data[j + 1] = key
+    return
 
 
 def bubbleSort(data):
@@ -54,6 +62,7 @@ def bubbleSort(data):
             # goes through the list from 0 to l-i-1 and swap if the element found is greater than the next element
             if data[j] > data[j + 1]:
                 data[j], data[j + 1] = data[j + 1], data[j]
+    return
 
 
 def rateComplexity():
@@ -76,3 +85,16 @@ def rateComplexity():
         print('Readability = Difficult')
     elif 0 <= score <= 29:
         print('Readability = Very Confusing')
+    return
+
+
+def run():
+    v.begin()
+    gui = v.userAcc()
+    createUser(gui)
+
+    if gui[3] == 'Student':
+        v.studentAcc()
+    elif gui[3] == 'Teacher':
+        v.teacherAcc()
+    return

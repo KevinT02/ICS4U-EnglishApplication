@@ -1,4 +1,3 @@
-from base64 import b64encode, b64decode
 import datamuse as dm
 import hashlib
 import numpy as np
@@ -9,21 +8,26 @@ import PyPDF2
 class User:
     def __init__(self, name, username, password, occupation):
         self.name = name
-        self.password = password
         self.username = username
+        self.password = password
         self.occupation = occupation
         self.file = 'user.txt'
-        super().__init__()
 
     def __str__(self):
-        return self.name + ", " + self.username + ", " + self.password + ", " + self.occupation
+        return self.name + ", " + self.username + ", " + Security.passEncrypt(self.password) + ", " + self.occupation
 
     def register(self) -> None:
         file = (open(self.file, 'a+'))
-
-        userList = [self.name, self.username, self.password, self.occupation]
+        userList = [self.name, self.username, self.occupation]
         fullList = ' | '.join(userList)
         file.write(fullList + "\n")
+
+        passList = [self.username, Security.passEncrypt(self.password)]
+
+        with open('password.txt', 'a') as pass_file:
+            fullList = ' | '.join(passList)
+            pass_file.write(fullList + "\n")
+
         return
 
     def createAcc(self):
@@ -42,6 +46,20 @@ class User:
         for i in dataList:
             for l in dataList:
                 account[i] = l
+
+    def loadUserList():
+        file = (open('user.txt', 'r')).readlines()
+
+        for line in file:
+            u = line.strip("\n")
+            infoUser = u.split(" | ")
+            s = line.strip("\n")
+            infoStudent = s.split(" | ")
+            users = [User(infoUser[0], infoUser[1], infoUser[2], infoUser[3]),
+                     Student(infoStudent[0], infoStudent[1], infoStudent[2], infoStudent[3])]
+            for user in users:
+                print(user.name + ': ' + user.occupation())
+        return
 
 
 class Student(User):
@@ -130,7 +148,7 @@ class Teacher(User):
 
   """
 
-    def __init__(self, name, username, password, occupation, degree, years):
+    def __init__(self, name, username, password, occupation, degree, experience):
         """
     Constructor to build a teacher object
 
@@ -150,7 +168,7 @@ class Teacher(User):
         super().__init__(name, username, password, occupation)
 
         self.degree = degree
-        self.years = years
+        self.experience = experience
 
     def profile(self) -> None:
         user_array = [super().__str__() + '\n']
@@ -159,7 +177,7 @@ class Teacher(User):
         user_file.close()
 
     def __str__(self):
-        return super().__str__() + ', ' + self.degree + ", " + self.years
+        return super().__str__() + ', ' + self.degree + ", " + self.experience
 
 
 class Complexity:
@@ -306,22 +324,17 @@ class Security:
         info = self.data
         for i in range(1, len(info)):
             key = info[i]
-
             j = i - 1
             while j >= 0 and key < info[j]:
                 info[j + 1] = info[j]
                 j -= 1
             info[j + 1] = key
 
-    def passSave(self) -> None:
+    @staticmethod
+    def passEncrypt(password):
+        hashPass = hashlib.sha1(str.encode(password)).hexdigest()  # convert byte to string
 
-        hashPass = hashlib.sha1(str.encode(self.password)).hexdigest()  # convert byte to string
-
-        passList = [self.username, str(hashPass)]
-
-        with open('password.txt', 'a') as pass_file:
-            fullList = ' | '.join(passList)
-            pass_file.write(fullList + "\n")
+        return str(hashPass)
 
     def loginPass(self) -> bool:
 
