@@ -1,12 +1,38 @@
-import hashlib
 import view as v
-from model import User, Student, Complexity, Security
+from model import User, Student, Complexity, Teacher, Security
+
+
+def loginCheck(username, password):
+    db = User.loadUser()
+    print(db)
+    result = Security.login(username, password, db)
+    while True:
+        if result:
+            print("Access granted. Welcome " + username + ".")
+            userInfo = User.getUser(username, 'user.txt')
+            return userInfo
+        elif not result:
+            print("Invalid Login Credentials.")
 
 
 def createUser(userInfo):
     userSave = User(userInfo[0], userInfo[1], userInfo[2], userInfo[3])
-    userSave.register()
+    userSave.regUser()
     return userInfo
+
+
+def createTeacher(userInfo, teacherInfo):
+    teacherSave = Teacher(userInfo[0], userInfo[1], userInfo[2], userInfo[3], teacherInfo[0], teacherInfo[1],
+                          teacherInfo[2], teacherInfo[3])
+    teacherSave.regTeacher()
+    return teacherSave
+
+
+def createStudent(userInfo, studentInfo):
+    studentSave = Student(userInfo[0], userInfo[1], userInfo[2], userInfo[3], studentInfo[0], studentInfo[1],
+                          studentInfo[2], studentInfo[3], studentInfo[4])
+    studentSave.regStudent()
+    return studentSave
 
 
 def loadUserList():
@@ -57,9 +83,9 @@ def bubbleSort(data):
     return
 
 
-def rateComplexity():
-    data = Complexity('literature.txt')
-    score = data.fleschScore()
+def rateComplexity(username):
+    data = Complexity(username)
+    score = data.fleschScore(data)
 
     print('Reading score:' + score)
 
@@ -81,12 +107,24 @@ def rateComplexity():
 
 
 def run():
-    v.GUI.begin()
-    gui = v.GUI.userAcc()
-    createUser(gui)
+    begin = v.GUI.begin()
+    if begin:
+        userInfo = loginCheck(begin[1], begin[2])
+        viewInfo = ('Name: ' + userInfo[0] + '\n' + 'User: ' + userInfo[1] + '\n' + 'Password: ' + userInfo[2] + '\n' + 'Occupation: ' + userInfo[3])
 
-    if gui[3] == 'Student':
-        v.GUI.studentAcc()
-    elif gui[3] == 'Teacher':
-        v.GUI.teacherAcc()
-    return
+        if 'Student' in viewInfo:
+            v.GUI.displayInfo(viewInfo, User.getUser('student.txt'))
+
+        elif ' Teacher' in viewInfo:
+            v.GUI.displayInfo(viewInfo, User.getUser('teacher.txt'))
+
+    elif not begin:
+        userInfo = v.GUI.userAcc()
+        createUser(userInfo)
+        if userInfo[3] == 'Student':
+            studentInfo = v.GUI.studentAcc()
+            createStudent(userInfo, studentInfo)
+        elif userInfo[3] == 'Teacher':
+            teacherInfo = v.GUI.teacherAcc()
+            createTeacher(userInfo, teacherInfo)
+        return

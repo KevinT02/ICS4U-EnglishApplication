@@ -19,5 +19,7 @@ object - maximum size of a python list on a 32 bit system is 536,870,912 element
 """
 
 import controller as c
+import model as m
 
+m.Text()
 c.run()

@@ -1,50 +1,51 @@
+#!/usr/bin/env Python3      
 import PySimpleGUI as sg
 
-'''
-# Demo of how columns work
-# window has on row 1 a vertical slider followed by a COLUMN with 7 rows
-# Prior to the Column element, this layout was not possible
-# Columns layouts look identical to window layouts, they are a list of lists of elements.
+sg.ChangeLookAndFeel('GreenTan')
 
-window = sg.Window('Columns')                                   # blank window
+# ------ Menu Definition ------ #      
+menu_def = [['File', ['Open', 'Save', 'Exit', 'Properties']],
+            ['Edit', ['Paste', ['Special', 'Normal', ], 'Undo'], ],
+            ['Help', 'About...'], ]
 
-# Column layout
-col = [[sg.Text('col Row 1')],
-       [sg.Text('col Row 2'), sg.Input('col input 1')],
-       [sg.Text('col Row 3'), sg.Input('col input 2')],
-       [sg.Text('col Row 4'), sg.Input('col input 3')],
-       [sg.Text('col Row 5'), sg.Input('col input 4')],
-       [sg.Text('col Row 6'), sg.Input('col input 5')],
-       [sg.Text('col Row 7'), sg.Input('col input 6')]]
-
-layout = [[sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(2).png'), sg.Column(col)],
-          [sg.In('Last input')],
-          [sg.OK()]]
-# Display the window and get values
-
-window = sg.Window('Compact 1-line window with column', layout)
-event, values = window.read()
-window.Close()
-
-sg.Popup(event, values, line_width=200)
-'''
-
-sg.change_look_and_feel('Reddit')
+# ------ Column Definition ------ #      
+column1 = [[sg.Text('Column 1', background_color='#F7F3EC', justification='center', size=(10, 1))],
+           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 1')],
+           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 2')],
+           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 3')]]
 
 layout = [
-    [sg.Text('Please enter your User information', size=(25, 1))],
-    [sg.Text('Name', size=(15, 1)),
-     sg.Input(size=(45, 1))],
-    [sg.Text('Username', size=(15, 1)),
-     sg.Input(size=(45, 1))],
-    [sg.Text('Password', size=(15, 1)),
-     sg.Input(size=(45, 1), password_char='•'),
-     sg.Button('Show')],
-    [sg.Text('Level', size=(15, 1)),
-     sg.Input(size=(45, 1))],
-    [sg.Submit(), sg.Cancel()]]
+    [sg.Menu(menu_def, tearoff=True)],
+    [sg.Text('All graphic widgets in one window!', size=(30, 1), justification='center', font=("Helvetica", 25), relief=sg.RELIEF_RIDGE)],
+    [sg.Text('Here is some text.... and a place to enter text')],
+    [sg.InputText('This is my text')],
+    [sg.Frame(layout=[
+        [sg.Checkbox('Checkbox', size=(10,1)),  sg.Checkbox('My second checkbox!', default=True)],
+        [sg.Radio('My first Radio!     ', "RADIO1", default=True, size=(10,1)), sg.Radio('My second Radio!', "RADIO1")]], title='Options',title_color='red', relief=sg.RELIEF_SUNKEN, tooltip='Use these to set flags')],
+    [sg.Multiline(default_text='This is the default Text should you decide not to type anything', size=(35, 3)),
+     sg.Multiline(default_text='A second multi-line', size=(35, 3))],
+    [sg.InputCombo(('Combobox 1', 'Combobox 2'), size=(20, 1)),
+     sg.Slider(range=(1, 100), orientation='h', size=(34, 20), default_value=85)],
+    [sg.InputOptionMenu(('Menu Option 1', 'Menu Option 2', 'Menu Option 3'))],
+    [sg.Listbox(values=('Listbox 1', 'Listbox 2', 'Listbox 3'), size=(30, 3)),
+     sg.Frame('Labelled Group',[[
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=25),
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=75),
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=10),
+         sg.Column(column1, background_color='#F7F3EC')]])],
+    [sg.Text('_'  * 80)],
+    [sg.Text('Choose A Folder', size=(35, 1))],
+    [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
+     sg.InputText('Default Folder'), sg.FolderBrowse()],
+    [sg.Submit(tooltip='Click to submit this window'), sg.Cancel()]
+]
 
 
-window = sg.Window('User Login', layout)
+window = sg.Window('Everything bagel', layout, default_element_size=(40, 1), grab_anywhere=False)
+
 event, values = window.read()
-print(values[])
+
+sg.popup('Title',
+         'The results of the window.',
+         'The button clicked was "{}"'.format(event),
+         'The values are', values)      
