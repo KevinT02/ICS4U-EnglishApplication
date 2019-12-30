@@ -47,12 +47,22 @@ class User:
     def getUser(username, db):
 
         with open(db, 'r') as studentFile:
-            for username in studentFile:
-                s = username.strip("\n")
-                infoStudent = s.split(" | ")
-                print(infoStudent)
+
+            for info in studentFile:
+                if username in info:
+                    s = info.strip("\n")
+                    infoStudent = s.split(" | ")
 
             return infoStudent
+
+    @staticmethod
+    def getDoc(username, db):
+        studentFile = open(db, encoding="utf8")
+        data = ''.join(studentFile)
+        infoStudent = data.split(" | ")
+        for info in infoStudent:
+            if info == username:
+                return infoStudent[1]
 
     @staticmethod
     def loadUser():
@@ -93,19 +103,6 @@ class Student(User):
     """
 
     def __init__(self, name, username, password, occupation, school, course, grade, age, readLevel):
-        """
-    Constructor to build a account object
-
-    Parameters
-    ---------------
-    name: str
-      The name of the user of the account
-    username: str
-      The username of the account
-    password: str
-      The password of the account
-
-    """
         super().__init__(name, username, password, occupation)
         self.school = school
         self.course = course
@@ -127,51 +124,8 @@ class Student(User):
 
 
 class Teacher(User):
-    """
-  The Teacher that communicates with the student about suggestions and tips for chosing and reading a book.
-
-  Attributes
-  -----------
-  name: str
-      The name of teacher
-  degree: str
-      The degree the teacher has
-  years: str
-      The number of years the teacher has teaching / amount of experience
-  occupation: str
-      The occupation at which the teacher teaches at (ie. elementary, middle, high)
-
-
-  Methods
-  -------
-  printName() -> None
-    Prints the name of the teacher to the console
-  printDegree() -> None
-    Prints the degrees / qualifications teacher to the console
-  printYear() -> None
-    Prints the years the teacher has been teaching to the console
-  printOccupation() -> None
-    Prints the occupation teacher teaches to the console
-
-  """
 
     def __init__(self, name, username, password, occupation, degree, school, course, experience):
-        """
-    Constructor to build a teacher object
-
-
-    Parameters
-    ----------
-    name: str
-    The name of teacher
-
-    degree: str
-    The degree the teacher has
-
-    years: str
-        The number of years the teacher has teaching / amount of experience
-
-    """
         super().__init__(name, username, Security.passEncrypt(password), occupation)
         self.degree = degree
         self.school = school
@@ -191,48 +145,14 @@ class Teacher(User):
 
 
 class Complexity:
-    """
-    The complexity analyzer that determines the level of complexity the text inputted into the application.
-
-    Attributes
-    -----------
-    name: str
-      The name of the user of the account
-    username: str
-      The username of the account
-    password: str
-      The password of the account
-
-
-    Methods
-    -------
-    sentenceCount () -> None
-      Counts the number of sentences in a text file
-    wordCount() -> None
-      Counts the number of words in a text file
-    """
 
     def __init__(self, username):
-        """
-    Constructor to build a complexity object
-
-
-    Parameters
-    ----------
-    fileName : str
-        The name of the text file the user wish to determine the complexity of
-
-    """
 
         self.username = username
         self.file = 'litFile.txt'
 
-        return
-
     def sentenceCount(self) -> int:
-        """
-        Counts the number of sentences in a text file
-        """
+
         periods = '.'
         sentFreq = 0
 
@@ -246,9 +166,7 @@ class Complexity:
         return int(sentFreq)
 
     def wordCount(self) -> None:
-        """
-        Counts the amount of words in a text file
-        """
+
         wordData = []
 
         with open(self.fileName, 'r') as file:
@@ -268,10 +186,7 @@ class Complexity:
         return
 
     def fleschScore(self) -> int:
-        """
 
-
-        """
         with open(self.fileName, 'r') as db:
 
             dbInfo = {}
@@ -289,46 +204,11 @@ class Complexity:
 
 
 class Security:
-    """
-    The complexity analyzer that determines the level of complexity the text inputted into the applcation.
-
-    Attributes
-    -----------
-    name: str
-      The name of the user of the account
-    username: str
-      The username of the account
-    password: str
-      The password of the account
-
-
-    Methods
-    -------
-    sentenceCount () -> None
-      Counts the number of sentences in a text file
-    wordCount() -> None
-      Counts the number of words in a text file
-
-    """
 
     def __init__(self, username, password):
-        """
-        Constructor to build a complexity object
 
-
-        Parameters
-        ----------
-        username : str
-            The username of the account
-
-        password : str
-            The combination of the password of the account with respect to the username
-
-        """
         self.username = username
         self.password = password
-
-        return
 
     @staticmethod
     def oganizeAcc(info) -> None:
@@ -385,29 +265,6 @@ class Security:
 
 
 class Text:
-    """
-    A text file the user inputs their text into in order to be analyzed by the applciation
-
-    Attributes
-    -----------
-    text: str
-      The name of the file user wants to write text in
-
-    Methods
-    -------
-    writeFile() -> None
-      Writes text into file
-
-
-    Constructor to build a text object
-
-
-    Parameters
-    ----------
-    text : str
-        The name of the text file the user wish to input in
-
-    """
 
     @staticmethod
     def userOrganize(fileContents) -> None:
@@ -479,38 +336,3 @@ class Text:
 
         else:
             return -1
-
-
-'''
-user1 = User("bob", "bobby", "123jhdshfs", "middle school")
-teacher1 = Teacher("bob", "bobby", "123jhdshfs", "masters in literature", "2", "middle school")
-student1 = Student("bob", "bobby", "123jhdshfs", "middle school")
-'''
-
-'''
-
-fileName = input('Which file would you like to open? ')
-
-fileOne = Complexity(fileName)
-
-userOne = Student("bob", "BBoy123", "bob321")
-
-
-try:
-  Text(12)
-except TypeError:
-  print ("Raised a TypeError as expected")
-except Exception:
-  print ("Some other Error popped up?")
-
-try:
-  Complexity(12)
-except TypeError:
-  print ("Raised a TypeError as expected")
-except Exception:
-  print ("Some other Error popped up?")
-
-userOne.printName()
-userOne.printUser()
-userOne.printPass()
-'''

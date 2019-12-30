@@ -27,6 +27,7 @@ class GUI:
             if event in (None, 'Cancel'):
                 break
             elif event == 'Login':
+                window.close()
                 return True, values['USERNAME'], values['PASSWORD']
             elif event == 'Create account':
                 window.close()
@@ -36,11 +37,17 @@ class GUI:
     def displayInfo(userInfo, personalInfo):
         sg.change_look_and_feel('Reddit')
 
-        menu_def = [['File', ['Open', ['User Info', 'Personal Info'], 'Save', 'Exit', 'Properties']],
-                    ['Edit', ['Paste', ['Normal'], 'Undo']],
-                    ['Help', 'About'], ]
+        menu_def = [
+
+            ['File', ['Open'], 'Save', 'Exit'],
+            ['Account', ['Open', ['User Info', 'Personal Info', 'Document']]],
+            ['Edit', ['Account Info']],
+            ['Help', ['About']]
+
+        ]
 
         layout = [
+
             [sg.Menu(menu_def, tearoff=True)],
             [sg.Text('Account Info', size=(35, 2), font=('Helvetica', 20), justification='left')],
             [sg.Output(size=(80, 18))],
@@ -58,11 +65,49 @@ class GUI:
             # ------ Process menu choices ------ #
             if event == 'About...':
                 sg.popup('About this program', 'Version 1.0', 'PySimpleGUI rocks...')
-            elif event == 'User Info':
-                print(userInfo)
 
-            if event == 'personalInfo':
-                print(personalInfo)
+            elif event == 'User Info':
+                viewInfo = ('----------------View Info----------------\n' + 'Name: ' + userInfo[0] + '\n' + 'User: ' +
+                            userInfo[1] + '\n' + 'Password: ' + userInfo[2] + '\n' + 'Occupation: ' + userInfo[
+                                3] + '\n')
+                print(viewInfo)
+
+            elif event == 'Personal Info':
+                studentView = ('--------------Personal Info--------------\n' + 'Name: ' + personalInfo[0] + '\n' +
+                               'User: ' + personalInfo[1] + '\n' + 'Password: ' +
+                               personalInfo[2] + '\n' + 'Occupation: ' + personalInfo[3] + '\n' + 'School: ' +
+                               personalInfo[3] + '\n' + 'Course: ' + personalInfo[3] + '\n' + 'Grade: ' +
+                               personalInfo[3] + '\n' + 'Age: ' + personalInfo[3] + '\n' + 'Reading Level: ' +
+                               personalInfo[4] + '\n')
+                print(studentView)
+
+            elif event == 'Document':
+                return 'Document'
+
+            elif event == 'About':
+                sg.popup_get_text('For more information about this program please visit the Github page using this '
+                                  'link:', default_text='https://github.com/KevinT02/ICS4U-EnglishApplication',
+                                  size=(50, 1),
+                                  title='Github Link')
+
+    @staticmethod
+    def popFile(fileContent):
+        layout = [
+
+
+            [sg.Output(size=(80, 18))],
+            [sg.Button('Display')]
+
+
+        ]
+
+        window = sg.Window('Document', layout)
+
+        while True:
+            event, values = window.read()
+            if event == 'Display':
+                print(fileContent)
+
 
 
     @staticmethod
@@ -97,8 +142,8 @@ class GUI:
                 window.close()
                 break
             elif event == 'Submit':
-                if values['NAME'] != '' and values['USERNAME'] != '' and values['PASSWORD'] != '' and values[
-                    'OCCUPATION'] != '':
+                if values['NAME'] != '' and values['USERNAME'] != '' and values['PASSWORD'] != '' and \
+                        values['OCCUPATION'] != '':
 
                     if values['OCCUPATION'] == 'Student' or values['OCCUPATION'] == 'Teacher':
                         window.close()
