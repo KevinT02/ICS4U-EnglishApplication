@@ -1,8 +1,7 @@
 import datamuse as dm
 import hashlib
-import numpy as np
 import textstat as tx
-import PyPDF2
+from PyPDF2 import PdfFileReader
 
 
 class User:
@@ -42,6 +41,12 @@ class User:
         for i in dataList:
             for l in dataList:
                 account[i] = l
+
+    @staticmethod
+    def uploadData(infoList):
+        with open('userDatabase.txt', 'a+') as userData:
+            userData.write(infoList + "\n")
+        return
 
     @staticmethod
     def getUser(username, db):
@@ -336,3 +341,17 @@ class Text:
 
         else:
             return -1
+
+    @staticmethod
+    def text_extractor(location):
+        with open(location, 'rb') as f:
+            pdf = PdfFileReader(f)
+
+            # get the first page
+            page = pdf.getPage(1)
+            print(page)
+            print('Page type: {}'.format(str(type(page))))
+
+            text = page.extractText()
+            print(text)
+

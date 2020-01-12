@@ -34,6 +34,18 @@ def createTeacher(userInfo, teacherInfo):
     return teacherSave
 
 
+def userDatabase(generalInfo, specificInfo):
+    database = [generalInfo, specificInfo]
+    n = 0
+    for item in database:
+        n += 1
+        information = ""
+        information += item[n]
+        for info in information:
+            infoList = ' | '.join(info)
+            return infoList
+
+
 def createStudent(userInfo, studentInfo):
     studentSave = Student(userInfo[0], userInfo[1], userInfo[2], userInfo[3], studentInfo[0], studentInfo[1],
                           studentInfo[2], studentInfo[3], studentInfo[4])
@@ -64,6 +76,11 @@ def rateComplexity(username):
     return
 
 
+def dataUpload(general, specific):
+    User.uploadData(userDatabase(general, specific))
+    return
+
+
 def run():
     begin = v.GUI.begin()
     if begin:
@@ -84,7 +101,9 @@ def run():
         if userInfo[3] == 'Student':
             studentInfo = v.GUI.studentAcc()
             createStudent(userInfo, studentInfo)
+            dataUpload(userInfo, studentInfo)
         elif userInfo[3] == 'Teacher':
             teacherInfo = v.GUI.teacherAcc()
             createTeacher(userInfo, teacherInfo)
+            dataUpload(userInfo, teacherInfo)
         return

@@ -9,7 +9,7 @@ class GUI:
         layout = [
             [sg.Text('')],
             [sg.Text('', size=(17, 1)),
-             sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(5).png')],
+             sg.Image(r'C:\Users\tu02_\PycharmProjects\ICS4U-EnglishApplication\logo(5).png')],
             [sg.Text('Sign in', size=(45, 2), font=('Helvetica', 15), justification='left')],
             [sg.Text('Username'), sg.Input(size=(45, 1), key='USERNAME')],
             [sg.Text('Password'), sg.Input(size=(45, 1), key='PASSWORD')],
@@ -130,7 +130,7 @@ class GUI:
             [sg.Submit(), sg.Cancel()]]
 
         # Main layout
-        layout = [[sg.Image(r'C:\Users\Kevin\PycharmProjects\ICS4U-EnglishApplication\logo(5).png'), sg.Column(col)]]
+        layout = [[sg.Image(r'C:\Users\tu02_\PycharmProjects\ICS4U-EnglishApplication\logo(5).png'), sg.Column(col)]]
 
         window = sg.Window('Create account', layout)
 
