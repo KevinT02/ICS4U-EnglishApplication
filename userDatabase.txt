@@ -1,2 +1,1 @@
-xczxz
-f
+[('dsf', 'dsf', 'sdfs', 'Student'), ('sdf', 'sdfsd', 'fds', 'fds', 'fdsf')]

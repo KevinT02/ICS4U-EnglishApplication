@@ -45,7 +45,8 @@ class User:
     @staticmethod
     def uploadData(infoList):
         with open('userDatabase.txt', 'a+') as userData:
-            userData.write(infoList + "\n")
+            userData.write(str(infoList))
+            userData.write("\n")
         return
 
     @staticmethod

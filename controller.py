@@ -36,14 +36,7 @@ def createTeacher(userInfo, teacherInfo):
 
 def userDatabase(generalInfo, specificInfo):
     database = [generalInfo, specificInfo]
-    n = 0
-    for item in database:
-        n += 1
-        information = ""
-        information += item[n]
-        for info in information:
-            infoList = ' | '.join(info)
-            return infoList
+    return database
 
 
 def createStudent(userInfo, studentInfo):
