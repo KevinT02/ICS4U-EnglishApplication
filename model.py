@@ -5,7 +5,60 @@ from PyPDF2 import PdfFileReader
 
 
 class User:
+    """
+        An account object that hold the information of the user: full name, username, password, occupation
+
+        Attributes
+        -----------
+        name: str
+            The name of the user of the account
+
+        username: str
+            The username of the user account
+
+        password: str
+            The password of the user account
+
+        occupation: str
+            The occupation of the user account, whether the individual is a student of teacher
+
+
+        Methods
+        -------
+        regUser() -> None
+            Calls the passSave function that saves the password into the security database and saves the general account
+            information associated with the user
+        uploadData() -> None
+            Uploads string containing all the information associated with the account
+        getUser() -> string
+            Returns the account information associated with username input
+        getDoc() -> string
+            Returns document associated with the username input
+        loadUser() -> tuple
+            Returns the account information held within the database
+        __str__() -> string
+            Returns a string containing the general information about the user
+
+        """
+
     def __init__(self, name, username, password, occupation):
+        """
+        Constructor to build a user object
+
+        Parameters
+        ----------
+        name : str
+            The name of the user
+        username : str, optional
+            The username of the user
+        password : str
+            The password associated with the account
+        occupation : str, optional
+            The occupation the user, Student or Teacher
+            Student if nothing selected
+
+        """
+
         self.name = name
         self.username = username
         self.password = password
@@ -13,10 +66,17 @@ class User:
         self.file = 'user.txt'
 
     def __str__(self):
+        """
+        Creates a string containing general user information including password, occupation, username and name of user
+        """
         return self.name, self.username, Security.passEncrypt(self.password), self.occupation
 
     def regUser(self) -> None:
+        """
+        Creates a list of information for the user account and saves it in the user database and uses passSave function
+        to save account and password in security database
 
+        """
         with open(self.file, 'a+') as user_file:
             userList = [self.name, self.username, Security.passEncrypt(self.password), self.occupation]
             fullList = ' | '.join(userList)
@@ -25,25 +85,18 @@ class User:
         Security.passSave(self.username, Security.passEncrypt(self.password))
         return
 
-    def createAcc(self):
-        file = open(self.file, 'r')
-        fileContents = file.readlines()
-
-        dataList = []
-
-        for i in fileContents:
-            line = i.split(',')
-            amount = line[1].strip('\n')
-            dataList.append(amount)
-
-        account = {}
-
-        for i in dataList:
-            for l in dataList:
-                account[i] = l
-
     @staticmethod
     def uploadData(infoList):
+        """
+        Takes all information associated with an account and writes it into the account database containing every
+        piece of information that had been inputted by user
+
+        Parameters
+        ----------
+        infoList : tuple
+            The account information contained within a list
+
+        """
         with open('userDatabase.txt', 'a+') as userData:
             userData.write(str(infoList))
             userData.write("\n")
@@ -51,6 +104,23 @@ class User:
 
     @staticmethod
     def getUser(username, db):
+        """
+        Attempts to read the information in the database and look for the username that was given and return the
+        information associated with it
+
+        Parameters
+        ----------
+        username : str
+            The username to look for in the database.
+        db : str
+            The database to look for the user in.
+
+        Returns
+        -------
+        string
+            Returns the information associated with the account
+
+        """
 
         with open(db, 'r') as studentFile:
 
@@ -63,6 +133,23 @@ class User:
 
     @staticmethod
     def getDoc(username, db):
+        """
+        Attempts to read the information in the database and look for the username that was given and return the
+        document associated with it
+
+        Parameters
+        ----------
+        username : str
+            The username to look for in the database.
+        db : str
+            The database to look for the user in.
+
+        Returns
+        -------
+        string
+            Returns the document associated with the account
+
+        """
         studentFile = open(db, encoding="utf8")
         data = ''.join(studentFile)
         infoStudent = data.split(" | ")
@@ -72,6 +159,16 @@ class User:
 
     @staticmethod
     def loadUser():
+        """
+        Attempts to load all the users contained within the database along with the passwords and put them in a
+        dictionary and return the dictionary for other functions to use when verifying password.
+
+        Returns
+        -------
+        dictionary
+            A dictionary containing various accounts and the correct passwords associated with it
+
+        """
         users = {}
         print("Loading Users")
         db = open("password.txt", "r")
@@ -90,21 +187,31 @@ class Student(User):
     Attributes
     -----------
     name: str
-      The name of the user of the account
+            The name of the user of the account
     username: str
-      The username of the student account
+        The username of the user account
     password: str
-      The password of the student account
+        The password of the user account
+    occupation: str
+        The occupation of the user account, whether the individual is a student of teacher
+    school: str
+      The school the student is currently attending
+    course: str
+      The course code of the course the student is currently in
+    grade: str
+      The grade the student is currently in
+    age: str
+      The age of the student
+    readLevel: str
+      The reading level of the student
 
 
     Methods
     -------
-    printName() -> None
-    Prints the name of the account to the console
-    printPass() -> None
-    Prints the password of the account to the console
-    printUser() -> None
-    Prints the username of the account to the console
+    regStudent() -> None
+        Takes the information of the student, puts it in a list and writes it into the database
+    __str__() -> None
+        Returns a string containing the attributes of the object
 
     """
 
@@ -118,6 +225,10 @@ class Student(User):
         self.file = 'student.txt'
 
     def regStudent(self) -> None:
+        """
+        Registers the students into the student database
+
+        """
         with open(self.file, 'a') as user_file:
             print(super().__str__())
             userList = [self.school, self.course, self.grade, str(self.age), self.readLevel]
@@ -126,10 +237,36 @@ class Student(User):
             user_file.write(infoList + "\n")
 
     def __str__(self):
+        """
+        Creates a string containing all the information about the student
+        """
         return super().__str__(), self.school, self.course, self.age, self.readLevel
 
 
 class Teacher(User):
+    """
+        An account object that hold the information of the user: full name, username, password
+
+        Attributes
+        -----------
+        name: str
+          The name of the user of the account
+        username: str
+          The username of the student account
+        password: str
+          The password of the student account
+
+
+        Methods
+        -------
+        printName() -> None
+        Prints the name of the account to the console
+        printPass() -> None
+        Prints the password of the account to the console
+        printUser() -> None
+        Prints the username of the account to the console
+
+        """
 
     def __init__(self, name, username, password, occupation, degree, school, course, experience):
         super().__init__(name, username, Security.passEncrypt(password), occupation)
@@ -151,6 +288,29 @@ class Teacher(User):
 
 
 class Complexity:
+    """
+        An account object that hold the information of the user: full name, username, password
+
+        Attributes
+        -----------
+        name: str
+          The name of the user of the account
+        username: str
+          The username of the student account
+        password: str
+          The password of the student account
+
+
+        Methods
+        -------
+        printName() -> None
+        Prints the name of the account to the console
+        printPass() -> None
+        Prints the password of the account to the console
+        printUser() -> None
+        Prints the username of the account to the console
+
+        """
 
     def __init__(self, username):
 
@@ -210,6 +370,29 @@ class Complexity:
 
 
 class Security:
+    """
+        An account object that hold the information of the user: full name, username, password
+
+        Attributes
+        -----------
+        name: str
+          The name of the user of the account
+        username: str
+          The username of the student account
+        password: str
+          The password of the student account
+
+
+        Methods
+        -------
+        printName() -> None
+        Prints the name of the account to the console
+        printPass() -> None
+        Prints the password of the account to the console
+        printUser() -> None
+        Prints the username of the account to the console
+
+        """
 
     def __init__(self, username, password):
 
@@ -271,6 +454,29 @@ class Security:
 
 
 class Text:
+    """
+        An account object that hold the information of the user: full name, username, password
+
+        Attributes
+        -----------
+        name: str
+          The name of the user of the account
+        username: str
+          The username of the student account
+        password: str
+          The password of the student account
+
+
+        Methods
+        -------
+        printName() -> None
+        Prints the name of the account to the console
+        printPass() -> None
+        Prints the password of the account to the console
+        printUser() -> None
+        Prints the username of the account to the console
+
+        """
 
     @staticmethod
     def userOrganize(fileContents) -> None:
@@ -355,4 +561,3 @@ class Text:
 
             text = page.extractText()
             print(text)
-
