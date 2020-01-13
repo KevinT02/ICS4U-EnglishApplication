@@ -216,6 +216,25 @@ class Student(User):
     """
 
     def __init__(self, name, username, password, occupation, school, course, grade, age, readLevel):
+        """
+        Constructor to build a user object
+
+        Parameters
+        ----------
+        school: str
+            The school the student is currently attending
+        course: str
+            The course code of the course the student is currently in
+        grade: str
+            The grade the student is currently in
+        age: str
+            The age of the student
+        readLevel: str
+            The reading level of the student
+        file : str
+            The database information is taken from
+
+        """
         super().__init__(name, username, password, occupation)
         self.school = school
         self.course = course
@@ -260,15 +279,32 @@ class Teacher(User):
         Methods
         -------
         printName() -> None
-        Prints the name of the account to the console
+            Prints the name of the account to the console
         printPass() -> None
-        Prints the password of the account to the console
+            Prints the password of the account to the console
         printUser() -> None
-        Prints the username of the account to the console
+            Prints the username of the account to the console
 
         """
 
     def __init__(self, name, username, password, occupation, degree, school, course, experience):
+        """
+        Constructor to build a user object
+
+        Parameters
+        ----------
+        degree: str
+            The degrees the teacher currently posses
+        school: str
+            The school the teacher is currently teaching at
+        course : str
+            The course code the teacher is currently teaching
+        experience : str
+            The years of experience the teacher has in the education field
+        file : str
+            The database information is taken from
+
+        """
         super().__init__(name, username, Security.passEncrypt(password), occupation)
         self.degree = degree
         self.school = school
@@ -284,6 +320,9 @@ class Teacher(User):
             teacher_file.write(infoList + "\n")
 
     def __str__(self):
+        """
+        A string containing information about the teacher object
+        """
         return super().__str__(), self.degree, self.school, self.course, self.experience
 
 
