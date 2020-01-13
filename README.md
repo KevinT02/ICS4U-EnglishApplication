@@ -1,5 +1,6 @@
 
-# ICS4U-EnglishApplication ![Acrolect Logo](https://github.com/KevinT02/ICS4U-EnglishApplication/blob/master/logo(6).png)
+# ICS4U-EnglishApplication 
+![Acrolect Logo](https://github.com/KevinT02/ICS4U-EnglishApplication/blob/master/logo(2).png)
  [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org) [![Active](http://img.shields.io/badge/Status-Active-green.svg)](https://tterb.github.io) 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://rubygems.org/gems/badgerbadgerbadger)
 
