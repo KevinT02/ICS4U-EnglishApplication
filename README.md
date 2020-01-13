@@ -1,4 +1,3 @@
-
 ![Acrolect Logo](https://github.com/KevinT02/ICS4U-EnglishApplication/blob/master/logo(2).png)
 # ICS4U-EnglishApplication 
 
