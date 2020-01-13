@@ -289,28 +289,28 @@ class Teacher(User):
 
 class Complexity:
     """
-        An account object that hold the information of the user: full name, username, password
+    An account object that hold the information of the user: full name, username, password
 
-        Attributes
-        -----------
-        name: str
-          The name of the user of the account
-        username: str
-          The username of the student account
-        password: str
-          The password of the student account
+    Attributes
+    -----------
+    username: str
+      The username of the account that the will be looked for in the database
+    file: str
+      The file name of database that will be analysed
 
-
-        Methods
-        -------
-        printName() -> None
+    Methods
+    -------
+    sentenceCount() -> None
         Prints the name of the account to the console
-        printPass() -> None
+    wordCount() -> None
         Prints the password of the account to the console
-        printUser() -> None
-        Prints the username of the account to the console
+    wordChoice() -> None
+        Uses the datamuse api to find appropriate synonyms for words to increase writing quality
+    fleschScore() -> int
+        Analyses text using the flesch score algorithm and returns an integer containing the score of the complexity of
+        the piece of literature
 
-        """
+    """
 
     def __init__(self, username):
 
@@ -371,28 +371,32 @@ class Complexity:
 
 class Security:
     """
-        An account object that hold the information of the user: full name, username, password
+    An object that holds information about the user's/account's security information which includes username and
+    password
 
-        Attributes
-        -----------
-        name: str
-          The name of the user of the account
-        username: str
-          The username of the student account
-        password: str
-          The password of the student account
+    Attributes
+    -----------
+    username: str
+      The username of the student account
+    password: str
+      The password of the student account
 
 
-        Methods
-        -------
-        printName() -> None
+    Methods
+    -------
+    organizeAcc() -> None
         Prints the name of the account to the console
-        printPass() -> None
+    passEncrypt() -> str
         Prints the password of the account to the console
-        printUser() -> None
+    passSave() -> None
+        Prints the username of the account to the
+    loginPass() -> bool
+        Prints the username of the account to the console
+    login() -> bool
         Prints the username of the account to the console
 
-        """
+
+    """
 
     def __init__(self, username, password):
 
@@ -400,7 +404,7 @@ class Security:
         self.password = password
 
     @staticmethod
-    def oganizeAcc(info) -> None:
+    def organizeAcc(info) -> None:
         for i in range(1, len(info)):
             key = info[i]
             j = i - 1
@@ -408,6 +412,7 @@ class Security:
                 info[j + 1] = info[j]
                 j -= 1
             info[j + 1] = key
+        return
 
     @staticmethod
     def passEncrypt(password):
@@ -421,6 +426,7 @@ class Security:
             passList = [username, password]
             fullList = ' | '.join(passList)
             pass_file.write(fullList + "\n")
+        return
 
     def loginPass(self) -> bool:
 
@@ -442,41 +448,37 @@ class Security:
 
     @staticmethod
     def login(username, password, db):
-        if username not in db.keys():
-            print("\nInvalid Login Credentials.")
-            return login()
+        while True:
+            if username not in db.keys():
+                print("\nInvalid Login Credentials.")
+                continue
 
-        hashPass = hashlib.sha1(str.encode(password)).hexdigest()
-        if hashPass == db[username]:
-            return True
-        else:
-            return False
+            hashPass = hashlib.sha1(str.encode(password)).hexdigest()
+            if hashPass == db[username]:
+                return True
+            else:
+                return False
 
 
 class Text:
     """
-        An account object that hold the information of the user: full name, username, password
-
-        Attributes
-        -----------
-        name: str
-          The name of the user of the account
-        username: str
-          The username of the student account
-        password: str
-          The password of the student account
+    A class containing functions that organize and analyze text
 
 
-        Methods
-        -------
-        printName() -> None
-        Prints the name of the account to the console
-        printPass() -> None
-        Prints the password of the account to the console
-        printUser() -> None
-        Prints the username of the account to the console
+    Methods
+    -------
+    userOrganize() -> None
+        Organize users in the database
+    insertionSort() -> None
+        Sorts database using the insertion sort algorithm
+    bubbleSort() -> None
+        Sorts database using the bubble sort algorithm
+    contentSearch() -> str
+        Uses binary search to look for user in database return location
+    textExtract() -> str
+        Uses the PyPDF2 to skim and read a pdf file for text and return a string
 
-        """
+    """
 
     @staticmethod
     def userOrganize(fileContents) -> None:
@@ -542,15 +544,15 @@ class Text:
             if arr[mid] == x:
                 return mid
             elif arr[mid] > x:
-                return binarySearch(arr, l, mid - 1, x)
+                return Text.userSearch(arr, l, mid - 1, x)
             else:
-                return binarySearch(arr, mid + 1, r, x)
+                return Text.userSearch(arr, mid + 1, r, x)
 
         else:
             return -1
 
     @staticmethod
-    def text_extractor(location):
+    def textExtractor(location):
         with open(location, 'rb') as f:
             pdf = PdfFileReader(f)
 
@@ -561,3 +563,4 @@ class Text:
 
             text = page.extractText()
             print(text)
+        return

@@ -1,1 +1,3 @@
 [('dsf', 'dsf', 'sdfs', 'Student'), ('sdf', 'sdfsd', 'fds', 'fds', 'fdsf')]
+[('kevin', 'tu02.kevin', '123456789', 'Student'), ('john fraser', 'ics4u', '12', '17', '4')]
+[('.', '.', '.', 'Student'), ('.', '.', '.', '.', '.')]
