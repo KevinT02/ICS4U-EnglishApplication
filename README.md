@@ -1,4 +1,4 @@
-![Acrolect Logo](https://github.com/KevinT02/ICS4U-EnglishApplication/blob/master/logo(2).png)
+![Acrolect Logo](https://github.com/KevinT02/ICS4U-EnglishApplication/blob/master/logo.png)
 # ICS4U-EnglishApplication 
 
  [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org) [![Active](http://img.shields.io/badge/Status-Active-green.svg)](https://tterb.github.io) 
