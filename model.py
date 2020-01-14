@@ -289,7 +289,7 @@ class Teacher(User):
 
     def __init__(self, name, username, password, occupation, degree, school, course, experience):
         """
-        Constructor to build a user object
+        Constructor to build a teacher object
 
         Parameters
         ----------
@@ -301,8 +301,6 @@ class Teacher(User):
             The course code the teacher is currently teaching
         experience : str
             The years of experience the teacher has in the education field
-        file : str
-            The database information is taken from
 
         """
         super().__init__(name, username, Security.passEncrypt(password), occupation)
@@ -313,6 +311,9 @@ class Teacher(User):
         self.file = 'teacher.txt'
 
     def regTeacher(self) -> None:
+        """
+        Registers teacher information into the teacher account database
+        """
         with open(self.file, 'a+') as teacher_file:
             teacherList = [self.degree + self.school + self.course + self.experience]
             fullList = list(super().__str__()) + teacherList
@@ -352,11 +353,24 @@ class Complexity:
     """
 
     def __init__(self, username):
+        """
+        Constructor to build a Complexity object
+
+        Parameters
+        ----------
+        username: str
+            The username that will be looked for in the document database to return a document text or file
+
+        """
 
         self.username = username
         self.file = 'litFile.txt'
 
     def sentenceCount(self) -> int:
+        """
+        Counts the amount of sentences within a file
+
+        """
 
         periods = '.'
         sentFreq = 0
@@ -371,6 +385,10 @@ class Complexity:
         return int(sentFreq)
 
     def wordCount(self) -> None:
+        """
+        Counts the amount of words within a file
+
+        """
 
         wordData = []
 
@@ -384,6 +402,10 @@ class Complexity:
         return
 
     def wordChoice(self) -> None:
+        """
+        Uses the datamuse api that suggest changes that will grammatically enhance the writing
+
+        """
         with open(self.fileName, 'r') as file:
             fileContents = file.readlines()
             api = dm.Datamuse()
@@ -391,6 +413,9 @@ class Complexity:
         return
 
     def fleschScore(self) -> int:
+        """
+        Uses the textstat api to determine how complex a piece of literature is based on the flesch score algorithm
+        """
 
         with open(self.fileName, 'r') as db:
 
@@ -429,8 +454,6 @@ class Security:
         Prints the password of the account to the console
     passSave() -> None
         Prints the username of the account to the
-    loginPass() -> bool
-        Prints the username of the account to the console
     login() -> bool
         Prints the username of the account to the console
 
@@ -438,12 +461,27 @@ class Security:
     """
 
     def __init__(self, username, password):
+        """
+        Constructor to build a Complexity object
+
+        Parameters
+        ----------
+        username: str
+            The username that will be looked for in the document database to return the correct password associated
+            with the username
+        password: str
+            The password that will be verified with the password that the user input
+
+        """
 
         self.username = username
         self.password = password
 
     @staticmethod
     def organizeAcc(info) -> None:
+        """
+        Organizes the accounts and users within a database
+        """
         for i in range(1, len(info)):
             key = info[i]
             j = i - 1
@@ -455,38 +493,31 @@ class Security:
 
     @staticmethod
     def passEncrypt(password):
+        """
+        Uses a hash library to convert the password the user input to hash in order to ensure security of account
+        """
         hashPass = hashlib.sha1(str.encode(password)).hexdigest()  # convert byte to string
 
         return str(hashPass)
 
     @staticmethod
     def passSave(username, password):
+        """
+        Saves the password in hash into the account password database
+        """
         with open('password.txt', 'a') as pass_file:
             passList = [username, password]
             fullList = ' | '.join(passList)
             pass_file.write(fullList + "\n")
         return
 
-    def loginPass(self) -> bool:
-
-        pass_file = open('password.txt', 'r')
-        filePass = pass_file.readlines()
-
-        for line in filePass:
-            login_info = line.split(" | ")
-
-            # convert string to byte
-            if self.username == login_info[0] and hashlib.sha1(str.encode(self.password)).hexdigest() == login_info[1]:
-                print("Correct")
-                return True
-            else:
-                print(login_info[0], login_info[1])
-                print(hashlib.sha1(str.encode(self.password)).hexdigest())
-                print("Incorrect")
-                return False
-
     @staticmethod
     def login(username, password, db):
+        """
+        looks through the password data base and converts the password the user inputted into hash and compares the
+        password in hash associated with the username and returns a boolean based on the comparison.
+
+        """
         while True:
             if username not in db.keys():
                 print("\nInvalid Login Credentials.")
@@ -592,6 +623,11 @@ class Text:
 
     @staticmethod
     def textExtractor(location):
+        """
+        Using the PyPDF2 api, the pdf file is analysed, skims and reads the text and converts it into a string for
+        the program to use
+
+        """
         with open(location, 'rb') as f:
             pdf = PdfFileReader(f)
 
