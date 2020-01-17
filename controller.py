@@ -1,19 +1,21 @@
 import view as v
-from model import User, Student, Complexity, Teacher, Security
+from model import User, Student, Complexity, Teacher, Login
 
 
 def loginCheck(username, password):
     # dictionary for account and password
     db = User.loadUser()
     print(db)
-    result = Security.login(username, password, db)
-    while True:
-        if result:
-            print("Access granted. Welcome " + username + ".")
-            userInfo = User.getUser(username, 'user.txt')
-            return userInfo
-        elif not result:
-            print("Invalid Login Credentials.")
+    account = Login(username, password, db)
+    result = account.login()
+
+    if result == "True":
+        print("Access granted. Welcome " + username + ".")
+        userInfo = User.getUser(username, 'user.txt')
+        return ['True', userInfo]
+
+    elif result == "Exist" or result == "False":
+        return ['False', 'incorrect']
 
 
 def userDoc(username):
@@ -34,11 +36,6 @@ def createTeacher(userInfo, teacherInfo):
     return teacherSave
 
 
-def userDatabase(generalInfo, specificInfo):
-    database = [generalInfo, specificInfo]
-    return database
-
-
 def createStudent(userInfo, studentInfo):
     studentSave = Student(userInfo[0], userInfo[1], userInfo[2], userInfo[3], studentInfo[0], studentInfo[1],
                           studentInfo[2], studentInfo[3], studentInfo[4])
@@ -53,50 +50,66 @@ def rateComplexity(username):
     print('Reading score:' + score)
 
     if 90 <= score <= 100:
-        print('Readability = Really Easy')
+        return "Very Easy"
     elif 80 <= score <= 89:
-        print('Readability = Easy')
+        return "Easy"
     elif 70 <= score <= 79:
-        print('Readability = Fairly Easy')
+        return "Fairly Easy"
     elif 60 <= score <= 69:
-        print('Readability = Standard')
+        return "Standard"
     elif 50 <= score <= 59:
-        print('Readability = Fairly Difficult')
+        return "Fairly Difficult"
     elif 30 <= score <= 49:
-        print('Readability = Difficult')
+        return "Difficult"
     elif 0 <= score <= 29:
-        print('Readability = Very Confusing')
+        return "Very Advanced"
     return
 
 
 def dataUpload(general, specific):
-    User.uploadData(userDatabase(general, specific))
+    data = [general, specific]
+    User.uploadData(data)
     return
 
 
 def run():
-    begin = v.GUI.begin()
-    if begin:
-        userInfo = loginCheck(begin[1], begin[2])
-        print('begin' + str(userInfo))
+    while True:
+        begin = v.GUI.begin()
+        if begin:
+            userInfo = loginCheck(begin[1], begin[2])
+            print('begin', str(userInfo))
+            print(userInfo[1])
 
-        if 'Student' in userInfo:
-            x = v.GUI.displayInfo(userInfo, User.getUser(userInfo[0], 'student.txt'))
-            if x == 'Document':
-                v.GUI.popFile(userDoc(userInfo[0]))
+            if userInfo[0] == 'True':
+                info = userInfo[1]
+                if 'Student' in info:
 
-        elif ' Teacher' in userInfo:
-            v.GUI.displayInfo(userInfo, User.getUser(userInfo[0], 'teacher.txt'))
+                    data = v.GUI.displayInfo(userInfo[1], User.getUser(info[0], 'student.txt'))
+                    if data == 'Document':
+                        v.GUI.popFile(userDoc(info[0]))
+                    elif data == 'Flesch score':
+                        score = rateComplexity(userInfo[0])
+                        print(score)
+                    else:
+                        continue
 
-    elif not begin:
-        userInfo = v.GUI.userAcc()
-        createUser(userInfo)
-        if userInfo[3] == 'Student':
-            studentInfo = v.GUI.studentAcc()
-            createStudent(userInfo, studentInfo)
-            dataUpload(userInfo, studentInfo)
-        elif userInfo[3] == 'Teacher':
-            teacherInfo = v.GUI.teacherAcc()
-            createTeacher(userInfo, teacherInfo)
-            dataUpload(userInfo, teacherInfo)
-        return
+                elif 'Teacher' in info:
+                    v.GUI.displayInfo(userInfo[1], User.getUser((info[0]), 'teacher.txt'))
+                    break
+            elif userInfo[0] == 'False':
+                v.GUI.incorrectPopup()
+                continue
+
+        if not begin:
+            userInfo = v.GUI.userAcc()
+            createUser(userInfo)
+            if userInfo[3] == 'Student':
+                studentInfo = v.GUI.studentAcc()
+                createStudent(userInfo, studentInfo)
+                dataUpload(userInfo, studentInfo)
+                continue
+            elif userInfo[3] == 'Teacher':
+                teacherInfo = v.GUI.teacherAcc()
+                createTeacher(userInfo, teacherInfo)
+                dataUpload(userInfo, teacherInfo)
+                continue

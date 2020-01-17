@@ -39,9 +39,8 @@ class GUI:
 
         menu_def = [
 
-            ['File', ['Open'], 'Save', 'Exit'],
-            ['Account', ['Open', ['User Info', 'Personal Info', 'Document']]],
-            ['Edit', ['Account Info']],
+            ['File', ['Account', ['Open', ['User Info', 'Personal Info', 'Document']]], 'Save', 'Exit'],
+            ['View', ['Flesh score']],
             ['Help', ['About']]
 
         ]
@@ -81,6 +80,9 @@ class GUI:
                                personalInfo[4] + '\n')
                 print(studentView)
 
+            elif event == 'Flesch score':
+                return 'Flesch score'
+
             elif event == 'Document':
                 return 'Document'
 
@@ -94,10 +96,8 @@ class GUI:
     def popFile(fileContent):
         layout = [
 
-
             [sg.Output(size=(80, 18))],
-            [sg.Button('Display')]
-
+            [sg.Button('Display'), sg.Button('Close')]
 
         ]
 
@@ -108,7 +108,9 @@ class GUI:
             if event == 'Display':
                 print(fileContent)
 
-
+            if event == 'Close':
+                window.close()
+                return 'Close'
 
     @staticmethod
     def userAcc():
@@ -151,7 +153,7 @@ class GUI:
                         return values['NAME'], values['USERNAME'], values['PASSWORD'], values['OCCUPATION']
 
                     else:
-                        sg.popup('Occupation invalid, use the dropdown menu')
+                        sg.popup('Occupation invalid, use the drop down menu')
 
                 else:
                     sg.popup('Please fill in all boxes')
@@ -168,15 +170,18 @@ class GUI:
             [sg.Text('Course', size=(15, 1)), sg.Input(size=(45, 1), key='COURSE')],
             [sg.Text('Grade', size=(15, 1)), sg.Input(size=(45, 1), key='GRADE')],
             [sg.Text('Age', size=(15, 1)), sg.Input(size=(45, 1), key='AGE')],
-            [sg.Text('Reading Level', size=(15, 1)), sg.Input(size=(45, 1), key='LEVEL')],
+            [sg.Text('Reading Level', size=(15, 1)),
+             sg.Slider(range=(1, 10), orientation='h', size=(30, 16), key='LEVEL')],
             [sg.Submit(), sg.Cancel()]
 
         ]
 
         window = sg.Window('Student Account Setup').Layout(layout)
         button, values = window.Read()
+        if button == "Submit" or button == "Cancel":
+            window.close()
 
-        return values['SCHOOL'], values['COURSE'], values['GRADE'], values['AGE'], values['LEVEL']
+        return values['SCHOOL'], values['COURSE'], values['GRADE'], values['AGE'], str(values['LEVEL'])
 
     @staticmethod
     def teacherAcc():
@@ -195,4 +200,11 @@ class GUI:
         window = sg.Window('Teacher Account Setup').Layout(layout)
         button, values = window.Read()
 
+        if button == "Submit" or button == "Cancel":
+            window.close()
+
         return values['DEGREE'], values['SCHOOL'], values['COURSE'], values['EXPERIENCE']
+
+    @staticmethod
+    def incorrectPopup():
+        sg.popup('The password or username does not match or exist. Please try again')

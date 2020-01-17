@@ -93,7 +93,7 @@ class User:
 
         Parameters
         ----------
-        infoList : tuple
+        infoList : list
             The account information contained within a list
 
         """
@@ -123,6 +123,7 @@ class User:
         """
 
         with open(db, 'r') as studentFile:
+            infoStudent = ""
 
             for info in studentFile:
                 if username in info:
@@ -254,6 +255,7 @@ class Student(User):
             fullList = list(super().__str__()) + userList
             infoList = ' | '.join(fullList)
             user_file.write(infoList + "\n")
+        return
 
     def __str__(self):
         """
@@ -327,6 +329,69 @@ class Teacher(User):
         return super().__str__(), self.degree, self.school, self.course, self.experience
 
 
+class Discover:
+    """
+        A class containing functions that organize and analyze text
+
+
+        Methods
+        -------
+        contentSearch() -> str
+            Uses binary search to look for user content in database return location
+        userSearch() -> str
+            Uses linear search to look for user in database return location
+
+        """
+
+    def __init__(self, fileContents, info):
+        """
+        Constructor to build a Complexity object
+
+        Parameters
+        ----------
+        fileContents: list
+            The username that will be looked for in the document database to return the correct password associated
+            with the username
+        info: str
+            The password that will be verified with the password that the user input
+
+        """
+
+        self.fileContents = fileContents
+        self.info = info
+
+    def contentSearch(self):
+        # l is the left side of the array while r is the right side, arr is the array and x is the element we are
+        # looking for in the array
+        content = self.fileContents
+        x = self.info
+        l = 0
+        r = len(content)
+
+        while r >= l:
+
+            mid = l + (r - l) // 2
+
+            if content[mid] == x:
+                return mid
+            elif content[mid] > x:
+                mid -= 1
+                return mid
+            else:
+                mid += 1
+                return mid
+
+        else:
+            return -1
+
+    def userSearch(self) -> None:
+        x = self.info
+        content = self.fileContents
+        for data in range(0, len(content)):
+            if content[data] == x:
+                return data
+
+
 class Complexity:
     """
     An account object that hold the information of the user: full name, username, password
@@ -352,7 +417,7 @@ class Complexity:
 
     """
 
-    def __init__(self, username):
+    def __init__(self, username, file):
         """
         Constructor to build a Complexity object
 
@@ -364,7 +429,8 @@ class Complexity:
         """
 
         self.username = username
-        self.file = 'litFile.txt'
+        self.fileName = file
+        self.default = 'litFile.txt'
 
     def sentenceCount(self) -> int:
         """
@@ -375,12 +441,11 @@ class Complexity:
         periods = '.'
         sentFreq = 0
 
-        with open(self.fileName, 'r') as file:
-            fileContents = Complexity.getFileContents(self.username)
+        fileContents = Discover(User.getDoc(self.username), periods).contentSearch
 
-            for i in range(len(fileContents)):
-                if (str(periods)) in fileContents:
-                    sentFreq += 1
+        for i in range(len(fileContents)):
+            if (str(periods)) in fileContents:
+                sentFreq += 1
 
         return int(sentFreq)
 
@@ -392,7 +457,7 @@ class Complexity:
 
         wordData = []
 
-        with open(self.fileName, 'r') as file:
+        with open(self.default, 'r') as file:
             fileContents = file.readlines()
 
             for words in fileContents:
@@ -406,7 +471,7 @@ class Complexity:
         Uses the datamuse api that suggest changes that will grammatically enhance the writing
 
         """
-        with open(self.fileName, 'r') as file:
+        with open(self.default, 'r') as file:
             fileContents = file.readlines()
             api = dm.Datamuse()
             api.words(rel_rhy=fileContents, max=1000)
@@ -454,8 +519,6 @@ class Security:
         Prints the password of the account to the console
     passSave() -> None
         Prints the username of the account to the
-    login() -> bool
-        Prints the username of the account to the console
 
 
     """
@@ -477,22 +540,8 @@ class Security:
         self.username = username
         self.password = password
 
-    @staticmethod
-    def organizeAcc(info) -> None:
-        """
-        Organizes the accounts and users within a database
-        """
-        for i in range(1, len(info)):
-            key = info[i]
-            j = i - 1
-            while j >= 0 and key < info[j]:
-                info[j + 1] = info[j]
-                j -= 1
-            info[j + 1] = key
-        return
-
-    @staticmethod
-    def passEncrypt(password):
+    def passEncrypt(self):
+        password = self.password
         """
         Uses a hash library to convert the password the user input to hash in order to ensure security of account
         """
@@ -500,34 +549,127 @@ class Security:
 
         return str(hashPass)
 
-    @staticmethod
-    def passSave(username, password):
+    def passSave(self):
         """
         Saves the password in hash into the account password database
         """
+        username = self.username
+        password = self.password
+
         with open('password.txt', 'a') as pass_file:
             passList = [username, password]
             fullList = ' | '.join(passList)
             pass_file.write(fullList + "\n")
         return
 
-    @staticmethod
-    def login(username, password, db):
+
+class Login:
+    """
+        An object that holds information about the user's/account's security information which includes username and
+        password
+
+        Attributes
+        -----------
+        username: str
+          The username of the student account
+        password: str
+          The password of the student account
+
+
+        Methods
+        -------
+        organizeAcc() -> None
+            Prints the name of the account to the console
+        passEncrypt() -> str
+            Prints the password of the account to the console
+        passSave() -> None
+            Prints the username of the account to the
+        login() -> string
+            Prints the username of the account to the console
+
+
+        """
+
+    def __init__(self, username, password, db):
+        """
+        Constructor to build a Complexity object
+
+        Parameters
+        ----------
+        username: str
+            The username that will be looked for in the document database to return the correct password associated
+            with the username
+        password: str
+            The password that will be verified with the password that the user input
+
+        """
+
+        self.username = username
+        self.password = password
+        self.db = db
+
+    def login(self):
         """
         looks through the password data base and converts the password the user inputted into hash and compares the
         password in hash associated with the username and returns a boolean based on the comparison.
 
         """
-        while True:
-            if username not in db.keys():
-                print("\nInvalid Login Credentials.")
-                continue
+        username = self.username
+        password = self.password
+        db = self.db
 
-            hashPass = hashlib.sha1(str.encode(password)).hexdigest()
-            if hashPass == db[username]:
-                return True
-            else:
-                return False
+        hashPass = hashlib.sha1(str.encode(password)).hexdigest()
+        if username not in db.keys():
+            print('exist')
+            return "Exist"
+        elif hashPass == db[username]:
+            print('true')
+            return "True"
+        else:
+            return "False"
+
+
+class PDF:
+    """
+        A class containing functions that organize and analyze text
+
+
+        Methods
+        -------
+        getText() -> str
+            Read the PDF file and returns a string containing text from the PDF
+
+        """
+
+    def __init__(self, location):
+        """
+        Constructor to build a PDF object
+
+        Parameters
+        ----------
+        location: str
+            The location which the file is located for the PyPDF2 api to extract text from
+
+        """
+
+        self.location = location
+
+    def getText(self):
+        """
+        Using the PyPDF2 api, the pdf file is analysed. It skims and reads the text and converts it into a string for
+        the program to use.
+
+        """
+        with open(self.location, 'rb') as f:
+            pdf = PdfFileReader(f)
+
+            # get the first page
+            page = pdf.getPage(1)
+            print(page)
+            print('Page type: {}'.format(str(type(page))))
+
+            text = page.extractText()
+        return text
 
 
 class Text:
@@ -543,53 +685,55 @@ class Text:
         Sorts database using the insertion sort algorithm
     bubbleSort() -> None
         Sorts database using the bubble sort algorithm
-    contentSearch() -> str
-        Uses binary search to look for user in database return location
-    textExtract() -> str
-        Uses the PyPDF2 to skim and read a pdf file for text and return a string
 
     """
 
-    @staticmethod
-    def userOrganize(fileContents) -> None:
-        for i in range(1, len(fileContents)):
-            key = fileContents[i]
+    def __init__(self, fileContents):
+        """
+        Constructor to build a Complexity object
+
+        Parameters
+        ----------
+        fileContents: str
+            The list that the program will be sorting through and organize using various algorithms
+
+        """
+
+        self.fileContents = fileContents
+
+    def userOrganize(self) -> None:
+        content = self.fileContents
+        for i in range(1, len(content)):
+            key = content[i]
 
             j = i - 1
-            while j >= 0 and key < fileContents[j]:
-                fileContents[j + 1] = fileContents[j]
+            while j >= 0 and key < content[j]:
+                content[j + 1] = content[j]
                 j -= 1
-                fileContents[j + 1] = key
+                content[j + 1] = key
 
-    @staticmethod
-    def userSearch(fileContents, x) -> None:
-        for i in range(0, len(fileContents)):
-            if fileContents[i] == x:
-                return i
-
-    @staticmethod
-    def insertionSort(fileContents):
-
+    def insertionSort(self):
+        content = self.fileContents
         # Goes through 1 to number of objects in list/end
-        for i in range(1, len(fileContents)):
+        for i in range(1, len(content)):
 
             # the integer in that spot of the list
-            key = fileContents[i]
+            key = content[i]
 
             # create variable for 1 below original position
             j = i - 1
 
             # while the number in the position above is bigger or equal to 0 and the value of the number in the old
             # position is smaller than the value of the new position move up 1
-            while j >= 0 and key > fileContents[j]:
-                fileContents[j + 1] = fileContents[j]
+            while j >= 0 and key > content[j]:
+                content[j + 1] = content[j]
                 j -= 1
-            fileContents[j + 1] = key
+            content[j + 1] = key
 
-    @staticmethod
-    def bubbleSort(fileContents):
+    def bubbleSort(self):
+        content = self.fileContents
         # bubble sort
-        l = len(fileContents)
+        l = len(content)
         # goes through entire list
         for i in range(l):
 
@@ -597,45 +741,5 @@ class Text:
             for j in range(0, l - i - 1):
 
                 # goes through the list from 0 to l-i-1 and swap if the element found is greater than the next element
-                if fileContents[j] > fileContents[j + 1]:
-                    fileContents[j], fileContents[j + 1] = fileContents[j + 1], fileContents[j]
-
-    @staticmethod
-    def contentSearch(arr, x):
-        # l is the left side of the array while r is the right side, arr is the array and x is the element we are
-        # looking for in the array
-        l = 0
-        r = len(arr)
-
-        if r >= l:
-
-            mid = l + (r - l) // 2
-
-            if arr[mid] == x:
-                return mid
-            elif arr[mid] > x:
-                return Text.userSearch(arr, l, mid - 1, x)
-            else:
-                return Text.userSearch(arr, mid + 1, r, x)
-
-        else:
-            return -1
-
-    @staticmethod
-    def textExtractor(location):
-        """
-        Using the PyPDF2 api, the pdf file is analysed, skims and reads the text and converts it into a string for
-        the program to use
-
-        """
-        with open(location, 'rb') as f:
-            pdf = PdfFileReader(f)
-
-            # get the first page
-            page = pdf.getPage(1)
-            print(page)
-            print('Page type: {}'.format(str(type(page))))
-
-            text = page.extractText()
-            print(text)
-        return
+                if content[j] > content[j + 1]:
+                    content[j], content[j + 1] = content[j + 1], content[j]
